@@ -78,6 +78,9 @@ FORMS    += mainwindow.ui \
     dtfwindow.ui \
     graphlimitsdialog.ui
 
+TRANSLATIONS = languages/vna_qt_zh.ts
+DISTFILES += languages/vna_qt_zh.ts
+
 RESOURCES += \
     resources.qrc
 

@@ -2,6 +2,8 @@
 #include "calkitsettings.H"
 #include <QApplication>
 #include <QtPlugin>
+#include <QTranslator>
+#include <QLibraryInfo>
 
 int main(int argc, char *argv[])
 {
@@ -12,10 +14,23 @@ int main(int argc, char *argv[])
     QCoreApplication::setOrganizationName("xaxaxa Development Ltd");
     QCoreApplication::setApplicationName("xaVNA QT GUI");
 
-    QApplication a(argc, argv);
-    a.setStyle("fusion");
+    QApplication app(argc, argv);
+    app.setStyle("fusion");
+
+
+    QTranslator qtTranslator;
+    qtTranslator.load("qt_" + QLocale::system().name(),
+            QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+    app.installTranslator(&qtTranslator);
+
+    QTranslator myappTranslator;
+    myappTranslator.load("languages/vna_qt_" + QLocale::system().name());
+    fprintf(stderr, "%s\n", QLocale::system().name().toStdString().c_str());
+    app.installTranslator(&myappTranslator);
+
+
     MainWindow* w = new MainWindow();
     w->show();
 
-    return a.exec();
+    return app.exec();
 }
