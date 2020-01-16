@@ -5,7 +5,6 @@ PC GUI software for NanoVNA V2, based on the software for the xaVNA.
 
 
 # 下载 / Downloads
-For pre-compiled executables go to:
 https://github.com/nanovna/NanoVNA-QT/releases
 
 
