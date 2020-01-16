@@ -38,4 +38,4 @@ cp ../libxavna/.libs/libxavna-0.dll release/
 cp ../libxavna/xavna_mock_ui/release/xavna_mock_ui.dll release/
 rm release/*.cpp release/*.o release/*.h 
 rm ../*.zip
-zip -r ../vna_qt.zip release
+zip -r ../vna_qt_windows.zip release
