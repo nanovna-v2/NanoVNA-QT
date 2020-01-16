@@ -19,7 +19,7 @@ https://github.com/nanovna/NanoVNA-QT/releases
 
 ##### Antenna
 
-<img src="pictures/angtenna.png" width="500">
+<img src="pictures/antenna.png" width="500">
 
 ##### Time to fault (measuring coax cable)
 
