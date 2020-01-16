@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=NanoVNA QT GUI
+Exec=AppRun %F
+Icon=icon
+Comment=GUI for NanoVNA V2
+Terminal=false
+Categories=Science;

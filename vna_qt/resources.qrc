@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file alias="pending">edit-redo-symbolic.svg</file>
+        <file alias="complete">emblem-ok-symbolic.svg</file>
+        <file alias="add">add.svg</file>
+        <file alias="close">xfce-wm-close.svg</file>
+        <file alias="maximize">xfce-wm-maximize.svg</file>
+        <file alias="unmaximize">xfce-wm-unmaximize.svg</file>
+    </qresource>
+</RCC>

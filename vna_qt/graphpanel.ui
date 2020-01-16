@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>GraphPanel</class>
+ <widget class="QWidget" name="GraphPanel">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>500</width>
+    <height>323</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QWidget" name="widget" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <property name="topMargin">
+       <number>5</number>
+      </property>
+      <property name="bottomMargin">
+       <number>5</number>
+      </property>
+      <item>
+       <widget class="QComboBox" name="d1">
+        <property name="styleSheet">
+         <string notr="true">color: red</string>
+        </property>
+        <item>
+         <property name="text">
+          <string>|S11|</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>|S22|</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>|S12|</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>|S21|</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>arg(S11)</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>arg(S22)</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>arg(S12)</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>arg(S21)</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>GroupDelay(S11)</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>GroupDelay(S22)</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>GroupDelay(S12)</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>GroupDelay(S21)</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="d2">
+        <property name="styleSheet">
+         <string notr="true">color: blue</string>
+        </property>
+        <item>
+         <property name="text">
+          <string>aaaaa</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="b_maximize">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="toolTip">
+         <string>maximize</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="resources.qrc">
+          <normaloff>:/icons/maximize</normaloff>:/icons/maximize</iconset>
+        </property>
+        <property name="flat">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
+ <connections/>
+</ui>

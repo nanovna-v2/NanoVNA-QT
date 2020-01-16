@@ -1,0 +1,8 @@
+doc/
+lib/
+plugins/
+translations/
+qt.conf
+vna_qt
+AppRun
+.DirIcon

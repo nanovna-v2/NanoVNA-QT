@@ -1,0 +1,12 @@
+#ifndef XAVNA_MOCK_UI_GLOBAL_H
+#define XAVNA_MOCK_UI_GLOBAL_H
+
+#include <QtCore/qglobal.h>
+
+#if defined(XAVNA_MOCK_UI_LIBRARY)
+#  define XAVNA_MOCK_UISHARED_EXPORT Q_DECL_EXPORT
+#else
+#  define XAVNA_MOCK_UISHARED_EXPORT Q_DECL_IMPORT
+#endif
+
+#endif // XAVNA_MOCK_UI_GLOBAL_H
