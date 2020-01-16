@@ -10,6 +10,22 @@ __Directory layout__
 For pre-compiled executables go to:
 https://github.com/nanovna/NanoVNA-QT/releases
 
+
+# Screenshots
+
+##### Open circuited coax stub
+
+<img src="pictures/coax.png" width="500">
+
+##### Antenna
+
+<img src="pictures/angtenna.png" width="500">
+
+##### Time to fault (measuring coax cable)
+
+<img src="pictures/ttf.png" width="500">
+
+
 # Building the software
 
 __Building on Linux__
