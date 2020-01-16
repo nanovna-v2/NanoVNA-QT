@@ -1,36 +1,34 @@
 # NanoVNA-QT
+NanoVNA V2配套的PC软件，可用于实时网络分析和测量，基于xaVNA软件。
+
 PC GUI software for NanoVNA V2, based on the software for the xaVNA.
 
-__Directory layout__
-* libxavna: C & C++ library for accessing the hardware, see README.md in subdirectory for more info
-* vna_qt: QT GUI
 
-
-# Downloads
+# 下载 / Downloads
 For pre-compiled executables go to:
 https://github.com/nanovna/NanoVNA-QT/releases
 
 
-# Screenshots
+# 截图 / Screenshots
 
-##### Open circuited coax stub
+##### 开路同轴电缆 / Open circuited coax stub
 
 <img src="pictures/coax.png" width="500">
 
-##### Antenna
+##### 天线 / Antenna
 
 <img src="pictures/antenna.png" width="500">
 
-##### Time to fault (measuring coax cable)
+##### 障碍距离 / Time to fault
 
 <img src="pictures/ttf.png" width="500">
 
 
-# Building the software
+# 编译 / Building the software
 
-__Building on Linux__
+__Linux系统下编译 / Building on Linux__
 
-Build libxavna (required for QT GUI):
+编译 libxavna:
 ```bash
 sudo apt-get install automake libtool make g++ libeigen3-dev libfftw3-dev
 cd /PATH/TO/NanoVNA-QT
@@ -42,7 +40,7 @@ cd libxavna/xavna_mock_ui/
 make
 ```
 
-Build & run QT GUI:
+编译 QT 界面:
 ```bash
 sudo apt-get install libqt5charts5-dev
 cd /PATH/TO/NanoVNA-QT
@@ -53,7 +51,7 @@ export QT=/PATH/TO/QT # optional, e.g. ~/qt/5.10.1/gcc_64
 ../run ./vna_qt
 ```
 
-__Building on mac os__
+__Mac系统下编译 / Building on mac os__
 ```bash
 brew install automake libtool make eigen fftw
 cd /PATH/TO/NanoVNA-QT
@@ -61,9 +59,9 @@ cd /PATH/TO/NanoVNA-QT
 # result is in ./vna_qt/vna_qt.app
 ```
 
-__Cross-compile for windows (from Linux)__
+__Linux系统下编译Windows目标 / Cross-compile for windows (from Linux)__
 
-Download and build MXE:
+下载与编译 MXE:
 ```bash
 cd ~/
 git clone https://github.com/mxe/mxe.git
@@ -71,9 +69,11 @@ cd mxe
 export QT_MXE_ARCH=386
 make qt5 qtcharts cc eigen fftw pthreads
 ```
+编辑mxe/settings.mk并将i686-w64-mingw32.shared添加到MXE_TARGETS变量。
+
 Edit mxe/settings.mk and add i686-w64-mingw32.shared to MXE_TARGETS.
 
-Build
+编译
 ```bash
 cd /PATH/TO/NanoVNA-QT
 export PATH="/PATH/TO/MXE/usr/bin:$PATH"
