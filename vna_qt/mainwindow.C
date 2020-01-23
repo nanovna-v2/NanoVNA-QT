@@ -14,6 +14,7 @@
 #include "touchstone.H"
 #include "calkitsettingsdialog.H"
 #include "ui_graphlimitsdialog.h"
+#include "calibrationfinetunedialog.H"
 #include <xavna/calibration.H>
 #include <xavna/xavna_cpp.H>
 #include <xavna/xavna_generic.H>
@@ -116,6 +117,13 @@ void MainWindow::loadSettings() {
     cks = settings.value("calkits").value<CalKitSettings>();
 
     nv.graphLimits = NetworkView::defaultGraphLimits;
+}
+
+void MainWindow::saveSettings_calKit() {
+    QSettings settings;
+    QVariant var;
+    var.setValue(cks);
+    settings.setValue("calkits", var);
 }
 
 void MainWindow::populateCalTypes() {
@@ -661,6 +669,8 @@ void MainWindow::on_b_apply_clicked() {
     }
     curCal = cal;
     curCalMeasurements = calMeasurements;
+    curCalMeasurementsArray = measurements;
+    curCalStdModelsArray = calStdModels;
     curCalCoeffs.resize(vna->nPoints);
     for(int i=0;i<(int)measurements.size();i++) {
         curCalCoeffs[i] = curCal->computeCoefficients(measurements[i], calStdModels[i]);
@@ -835,10 +845,7 @@ void MainWindow::on_actionKit_settings_triggered() {
     dialog.fromSettings(cks);
     if(dialog.exec() == QDialog::Accepted) {
         dialog.toSettings(cks);
-        QSettings settings;
-        QVariant var;
-        var.setValue(cks);
-        settings.setValue("calkits", var);
+        saveSettings_calKit();
     }
 }
 
@@ -976,4 +983,29 @@ void MainWindow::on_actionExport_csv_triggered() {
         saveFile(fileName, data);
         QMetaObject::invokeMethod(this, "sMeasurementCompleted", Qt::QueuedConnection);
     });
+}
+
+void MainWindow::on_actionFine_tune_triggered() {
+    if(curCal == nullptr) {
+        QMessageBox::critical(this, "Error", "No calibration active. Please perform a calibration first.");
+        return;
+    }
+    CalibrationFineTuneDialog dialog;
+    dialog.init(curCal, curCalStdModelsArray, vna->startFreqHz, vna->stepFreqHz);
+    dialog.modelsChanged = [&]() {
+        for(int i=0; i<vna->nPoints; i++) {
+            curCalCoeffs.at(i) = curCal->computeCoefficients(curCalMeasurementsArray.at(i), dialog.newModels.at(i));
+            updateViews(i);
+        }
+    };
+    if(dialog.exec() == QDialog::Accepted) {
+        curCalStdModelsArray = dialog.newModels;
+        // update global cal kit parameters
+        dialog.toSettings(cks);
+        saveSettings_calKit();
+    } else {
+        // revert original models and re-apply calibration
+        dialog.newModels = dialog.origModels;
+        dialog.modelsChanged(); // this calls the lambda above
+    }
 }

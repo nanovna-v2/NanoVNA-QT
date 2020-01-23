@@ -56,10 +56,10 @@ private:
 public:
     const char* calButtonDoneStyle = "background-color: #9999ff";
 
-    VNADevice* vna=NULL;
-    ImpedanceDisplay* impdisp=NULL;
-    QTimer* timer=NULL;
-    PolarView* polarView=NULL;
+    VNADevice* vna = nullptr;
+    ImpedanceDisplay* impdisp = nullptr;
+    QTimer* timer = nullptr;
+    PolarView* polarView = nullptr;
     NetworkView nv;
     DTFWindow dtf;
     vector<GraphPanel*> graphs;
@@ -72,14 +72,22 @@ public:
     map<string, QWidget*> calButtons;
     // for each reference standard, map from name to measured values
     map<string, vector<VNARawValue> > calMeasurements;
+
     // current active calibration
-    const VNACalibration* curCal = NULL;
+    const VNACalibration* curCal = nullptr;
     // current calibration coefficients
     vector<MatrixXcd> curCalCoeffs;
     // a copy of calMeasurements from when curCal was updated
     map<string, vector<VNARawValue> > curCalMeasurements;
+
+    // a copy of cal kit measurements used in curCal, indexed by [freqIndex][modelIndex]
+    vector<vector<VNARawValue> > curCalMeasurementsArray;
+    // a copy of the calibration kit parameters used in curCal, indexed by [freqIndex][modelIndex]
+    vector<vector<VNACalibratedValue> > curCalStdModelsArray;
+
     // the current global cal kit settings
     CalKitSettings cks;
+
     // the current length extension adjustment
     double portExt1Seconds = 0., portExt2Seconds = 0.;
 
@@ -106,10 +114,11 @@ public:
 
     double freqScale = 1e-6;
 
-    explicit MainWindow(QWidget *parent = 0);
+    explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
     void loadSettings();
+    void saveSettings_calKit();
 
     void populateCalTypes();
     // setup the line graph and smith chart widgets, and populate this->views
@@ -209,6 +218,7 @@ private slots:
     void on_actionSwap_ports_toggled(bool checked);
     void on_b_cal_help_clicked();
     void on_actionExport_csv_triggered();
+    void on_actionFine_tune_triggered();
 };
 
 #endif // MAINWINDOW_H

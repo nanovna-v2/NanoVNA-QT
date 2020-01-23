@@ -50,7 +50,8 @@ SOURCES +=\
     calkitsettingsdialog.C \
     calkitsettings.C \
     networkview.C \
-    dtfwindow.C
+    dtfwindow.C \
+    calibrationfinetunedialog.C
 
 HEADERS  += \
     polarview.H \
@@ -65,7 +66,8 @@ HEADERS  += \
     calkitsettingsdialog.H \
     calkitsettings.H \
     networkview.H \
-    dtfwindow.H
+    dtfwindow.H \
+    calibrationfinetunedialog.H
 
 FORMS    += mainwindow.ui \
     markerslider.ui \
@@ -76,7 +78,8 @@ FORMS    += mainwindow.ui \
     calkitsettingsdialog.ui \
     calkitsettingswidget.ui \
     dtfwindow.ui \
-    graphlimitsdialog.ui
+    graphlimitsdialog.ui \
+    calibrationfinetunedialog.ui
 
 TRANSLATIONS = languages/vna_qt_zh.ts
 DISTFILES += languages/vna_qt_zh.ts

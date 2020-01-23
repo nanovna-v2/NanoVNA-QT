@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>900</width>
-    <height>500</height>
+    <width>960</width>
+    <height>550</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -364,7 +364,7 @@ Measurements</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>900</width>
+     <width>960</width>
      <height>22</height>
     </rect>
    </property>
@@ -375,6 +375,7 @@ Measurements</string>
     <addaction name="actionLoad"/>
     <addaction name="actionSave"/>
     <addaction name="actionKit_settings"/>
+    <addaction name="actionFine_tune"/>
     <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="menuView">
@@ -787,6 +788,11 @@ Measurements</string>
   <action name="actionExport_csv">
    <property name="text">
     <string>Export impedances (csv)</string>
+   </property>
+  </action>
+  <action name="actionFine_tune">
+   <property name="text">
+    <string>Fine tune...</string>
    </property>
   </action>
  </widget>
