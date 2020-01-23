@@ -90,6 +90,7 @@ public:
 
     // the current length extension adjustment
     double portExt1Seconds = 0., portExt2Seconds = 0.;
+    double portExtZ0 = 50.;
 
     vector<complex<double> > tmp_s11;
     vector<VNACalibratedValue> tmp_sn1,tmp_sn2,tmp_sparams;
@@ -142,7 +143,7 @@ public:
     bool maximizePane(QWidget* w);
     QWidget* createTopFloat(QWidget* w);
 
-    void setPortExtension(double t1_seconds, double t2_seconds);
+    void updatePortExtension();
 
     string serializeCalibration(const CalibrationInfo& cal);
     CalibrationInfo deserializeCalibration(QTextStream &inp);
@@ -219,6 +220,8 @@ private slots:
     void on_b_cal_help_clicked();
     void on_actionExport_csv_triggered();
     void on_actionFine_tune_triggered();
+    void on_t_extz_returnPressed();
+    void on_slider_extz_valueChanged(int value);
 };
 
 #endif // MAINWINDOW_H

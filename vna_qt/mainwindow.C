@@ -376,11 +376,13 @@ QWidget *MainWindow::createTopFloat(QWidget *w) {
     return widget2;
 }
 
-void MainWindow::setPortExtension(double t1_seconds, double t2_seconds) {
-    portExt1Seconds = t1_seconds;
-    portExt2Seconds = t2_seconds;
-    ui->t_ext1->setText(qs(ssprintf(32, "%.0f ps", round(t1_seconds*1e12))));
-    ui->t_ext2->setText(qs(ssprintf(32, "%.0f ps", round(t2_seconds*1e12))));
+void MainWindow::updatePortExtension() {
+    portExt1Seconds = ui->slider_ext1->value()*1e-12;
+    portExt2Seconds = ui->slider_ext2->value()*1e-12;
+    portExtZ0 = ui->slider_extz->value()/100.;
+    ui->t_ext1->setText(qs(ssprintf(32, "%.0f ps", round(portExt1Seconds*1e12))));
+    ui->t_ext2->setText(qs(ssprintf(32, "%.0f ps", round(portExt2Seconds*1e12))));
+    ui->t_extz->setText(qs(ssprintf(32, "%.2f", portExtZ0)));
     for(int i=0;i<vna->nPoints;i++)
         updateViews(i);
 }
@@ -705,6 +707,46 @@ void MainWindow::on_actionSweep_params_triggered() {
     }
 }
 
+complex<double> calculatePortExt(complex<double> refl, complex<double> Tcable, double Z0, double Zcable) {
+    double Z0sq = Z0*Z0;
+    double Zcablesq = Zcable*Zcable;
+
+    /* derived using sympy:
+    from sympy import *
+
+    def toRefl(Z, Z0):
+        return (Z/Z0-1)/(Z/Z0+1)
+
+    def toZ(refl, Z0):
+        return (1+refl)/(1-refl)*Z0
+
+    def convertRefl(refl, Z0, newZ0):
+        Z = toZ(refl, Z0)
+        return toRefl(Z, newZ0)
+
+    refl, Z0, Zcable, Tcable = symbols('refl Z0 Zcable Tcable')
+
+    cableFarRefl = convertRefl(refl, Z0, Zcable)
+    cableNearRefl = cableFarRefl*Tcable
+    nearRefl = convertRefl(cableNearRefl, Zcable, Z0)
+
+    result = simplify(nearRefl)
+    result = collect(result, Tcable)
+    result = collect(result, refl)
+
+    print result
+    */
+
+    //auto result = (Tcable*(-Z0sq*refl - Z0sq - 2*Z0*Zcable*refl - Zcablesq*refl + Zcablesq) + Z0sq - Zcablesq + refl*(Z0sq - 2*Z0*Zcable + Zcablesq))
+    //            / (Tcable*(Z0sq*refl + Z0sq - 2*Z0*Zcable - Zcablesq*refl + Zcablesq) - Z0sq - 2*Z0*Zcable - Zcablesq + refl*(-Z0sq + Zcablesq));
+    auto term1 = Z0sq*refl + Z0sq;
+    auto term2 = -Zcablesq*refl + Zcablesq;
+    auto term3 = 2*Z0*Zcable;
+    auto result = (Tcable*(-term1 - term3*refl + term2) + Z0sq - Zcablesq + refl*(Z0sq - term3 + Zcablesq))
+                / (Tcable*(term1  - term3      + term2) - Z0sq - Zcablesq - term3 + refl*(-Z0sq + Zcablesq));
+    return result;
+}
+
 void MainWindow::updateViews(int freqIndex) {
     if(freqIndex >= (int)nv.values.size()) return;
     if(curCal)
@@ -713,14 +755,17 @@ void MainWindow::updateViews(int freqIndex) {
 
     // calculate port extension
     double freqHz = vna->freqAt(freqIndex);
-    // S11
-    nv.values.at(freqIndex)(0, 0) *= polar(1., 4*M_PI*freqHz*portExt1Seconds);
+
+    auto& S11 = nv.values.at(freqIndex)(0, 0);
+    S11 = calculatePortExt(S11, polar(1., 4*M_PI*freqHz*portExt1Seconds), 50., portExtZ0);
+
+    auto& S22 = nv.values.at(freqIndex)(1, 1);
+    S22 = calculatePortExt(S22, polar(1., 4*M_PI*freqHz*portExt2Seconds), 50., portExtZ0);
+
     // S21
     nv.values.at(freqIndex)(1, 0) *= polar(1., 2*M_PI*freqHz*(portExt1Seconds+portExt2Seconds));
     // S12
     nv.values.at(freqIndex)(0, 1) *= polar(1., 2*M_PI*freqHz*(portExt1Seconds+portExt2Seconds));
-    // S22
-    nv.values.at(freqIndex)(1, 1) *= polar(1., 4*M_PI*freqHz*portExt2Seconds);
 
     if(ui->actionDisable_chart_update->isChecked()) return;
     nv.updateViews(freqIndex);
@@ -889,11 +934,11 @@ void MainWindow::on_actionPort_length_extension_toggled(bool arg1) {
 }
 
 void MainWindow::on_slider_ext1_valueChanged(int) {
-    setPortExtension(ui->slider_ext1->value()*1e-12, ui->slider_ext2->value()*1e-12);
+    updatePortExtension();
 }
 
 void MainWindow::on_slider_ext2_valueChanged(int) {
-    setPortExtension(ui->slider_ext1->value()*1e-12, ui->slider_ext2->value()*1e-12);
+    updatePortExtension();
 }
 
 void MainWindow::on_dock_ext_visibilityChanged(bool visible) {
@@ -904,20 +949,19 @@ void MainWindow::on_dock_ext_visibilityChanged(bool visible) {
 void MainWindow::on_b_reset_ext_clicked() {
     ui->slider_ext1->setValue(0);
     ui->slider_ext2->setValue(0);
+    ui->slider_extz->setValue(5000);
 }
 
 void MainWindow::on_t_ext1_returnPressed() {
     string txt = ui->t_ext1->text().toStdString();
     double lengthPs = atof(txt.c_str());
     ui->slider_ext1->setValue(int(lengthPs));
-    setPortExtension(lengthPs*1e-12, portExt2Seconds);
 }
 
 void MainWindow::on_t_ext2_returnPressed() {
     string txt = ui->t_ext2->text().toStdString();
     double lengthPs = atof(txt.c_str());
     ui->slider_ext2->setValue(int(lengthPs));
-    setPortExtension(portExt1Seconds, lengthPs*1e-12);
 }
 
 void MainWindow::on_actionT_R_mode_toggled(bool checked) {
@@ -1008,4 +1052,14 @@ void MainWindow::on_actionFine_tune_triggered() {
         dialog.newModels = dialog.origModels;
         dialog.modelsChanged(); // this calls the lambda above
     }
+}
+
+void MainWindow::on_t_extz_returnPressed() {
+    string txt = ui->t_extz->text().toStdString();
+    double Z = atof(txt.c_str());
+    ui->slider_extz->setValue(int(round(Z*100)));
+}
+
+void MainWindow::on_slider_extz_valueChanged(int) {
+    updatePortExtension();
 }
