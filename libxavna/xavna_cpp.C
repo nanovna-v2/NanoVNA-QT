@@ -35,8 +35,9 @@ namespace xaxaxa {
 		}
 		_dev = xavna_open(dev.c_str());
 		if(!_dev) throw runtime_error(strerror(errno));
-		
-		if(isAutoSweep() != _lastDeviceIsAutosweep) {
+
+		bool a = isAutoSweep();
+		if(a != _lastDeviceIsAutosweep) {
 			if(isAutoSweep()) {
 				nValues = 2;
 				nWait = -1;
@@ -45,6 +46,7 @@ namespace xaxaxa {
 				nWait = 20;
 			}
 		}
+		_lastDeviceIsAutosweep = a;
 	}
 	bool VNADevice::isTR() {
 		if(!_dev) return true;
