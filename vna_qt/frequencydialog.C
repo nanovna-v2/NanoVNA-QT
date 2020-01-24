@@ -31,10 +31,14 @@ void FrequencyDialog::fromVNA(const VNADevice &dev) {
     emit on_slider_power_valueChanged(ui->slider_power->value());
 }
 
+bool floatEq(double a, double b, double maxError=1e-9) {
+    double err = abs(a/b - 1.);
+    return err <= maxError;
+}
 bool FrequencyDialog::toVNA(VNADevice &dev) {
     double oldStartFreq = dev.startFreqHz;
     double oldStepFreq = dev.stepFreqHz;
-    double oldNPoints = dev.nPoints;
+    int oldNPoints = dev.nPoints;
     dev.startFreqHz = ui->t_start->value()*1e6;
     double stopFreqHz = ui->t_stop->value()*1e6;
 
@@ -49,7 +53,13 @@ bool FrequencyDialog::toVNA(VNADevice &dev) {
     dev.attenuation1 = dev.attenuation2 = dev.maxPower() - ui->slider_power->value();
     dev.nValues = atoi(ui->t_nValues->text().toUtf8().data());
     dev.nWait = atoi(ui->t_nWait->text().toUtf8().data());
-    return (dev.startFreqHz != oldStartFreq) || (dev.stepFreqHz != oldStepFreq) || (dev.nPoints != oldNPoints);
+    if(!floatEq(dev.startFreqHz, oldStartFreq))
+        return true;
+    if(!floatEq(dev.stepFreqHz, oldStepFreq))
+        return true;
+    if(dev.nPoints != oldNPoints)
+        return true;
+    return false;
 }
 
 void FrequencyDialog::updateLabels() {
