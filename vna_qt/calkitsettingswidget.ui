@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>611</width>
-    <height>44</height>
+    <height>45</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -15,6 +15,12 @@
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>0</width>
+    <height>45</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>Form</string>
@@ -85,8 +91,17 @@
    </item>
    <item>
     <widget class="QLabel" name="l_status">
+     <property name="styleSheet">
+      <string notr="true">color: #0066aa; font-family: Monospace</string>
+     </property>
      <property name="text">
-      <string/>
+      <string>aaaaa&lt;br /&gt;sssss</string>
+     </property>
+     <property name="textFormat">
+      <enum>Qt::RichText</enum>
+     </property>
+     <property name="indent">
+      <number>8</number>
      </property>
     </widget>
    </item>

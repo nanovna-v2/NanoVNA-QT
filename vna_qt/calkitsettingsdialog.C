@@ -42,10 +42,11 @@ void CalKitSettingsDialog::fromSettings(const CalKitSettings &settings) {
     for(auto& item:idealCalStds) {
         string name = item.first;
         string desc = name;
+        auto& inf = info[name];
         if(calStdDesc.find(name) != calStdDesc.end())
             desc = calStdDesc[name];
 
-        Ui::CalKitSettingsWidget& ui1 = info[name].ui;
+        Ui::CalKitSettingsWidget& ui1 = inf.ui;
         QWidget* w = new QWidget();
         ui1.setupUi(w);
         layout->addWidget(w);
@@ -53,21 +54,28 @@ void CalKitSettingsDialog::fromSettings(const CalKitSettings &settings) {
         ui1.l_desc->setText(qs(desc));
 
         auto it = settings.calKitModels.find(name);
-        if(it != settings.calKitModels.end()) {
+        if(it != settings.calKitModels.end() && (*it).second.values.size() != 0) {
             ui1.r_s_param->setChecked(true);
-            info[name].data = (*it).second;
-            info[name].useIdeal = false;
+            const SParamSeries& series = (*it).second;
+            inf.data = series;
+            inf.useIdeal = false;
             auto it2 = settings.calKitNames.find(name);
             if(it2 != settings.calKitNames.end())
-                ui1.l_status->setText(qs((*it2).second));
-        } else info[name].useIdeal = true;
+                inf.fileName = (*it2).second;
+            ui1.l_status->setText(generateLabel(inf));
+        } else {
+            inf.useIdeal = true;
+            ui1.l_status->setText("");
+        }
 
         connect(ui1.r_ideal, &QRadioButton::clicked, [this, name](){
-            info[name].useIdeal = true;
-            info[name].ui.l_status->setText("");
+            auto& inf = info[name];
+            inf.useIdeal = true;
+            inf.ui.l_status->setText("");
         });
 
         connect(ui1.r_s_param, &QRadioButton::clicked, [this, name](){
+            auto& inf = info[name];
             QString fileName = QFileDialog::getOpenFileName(this,
                     tr("Open S parameters file"), "",
                     tr("S parameters (*.s1p *.s2p);;All Files (*)"));
@@ -87,9 +95,10 @@ void CalKitSettingsDialog::fromSettings(const CalKitSettings &settings) {
                     try {
                         QFileInfo fileInfo(fileName);
                         parseTouchstone(data,nPorts,series.values);
-                        info[name].useIdeal = false;
-                        info[name].data = series;
-                        info[name].ui.l_status->setText(fileInfo.fileName());
+                        inf.useIdeal = false;
+                        inf.data = series;
+                        inf.fileName = fileName.toStdString();
+                        inf.ui.l_status->setText(generateLabel(inf));
                     } catch(exception& ex) {
                         QMessageBox::warning(this, tr("Error parsing S parameter file"), ex.what());
                         goto fail;
@@ -99,7 +108,7 @@ void CalKitSettingsDialog::fromSettings(const CalKitSettings &settings) {
             return;
         fail:
             // revert radiobutton state
-            info[name].ui.r_ideal->setChecked(info[name].useIdeal);
+            inf.ui.r_ideal->setChecked(inf.useIdeal);
         });
     }
 }
@@ -113,7 +122,23 @@ void CalKitSettingsDialog::toSettings(CalKitSettings &settings) {
         if(it == info.end()) continue;
         if(!(*it).second.useIdeal) {
             settings.calKitModels[name] = (*it).second.data;
-            settings.calKitNames[name] = (*it).second.ui.l_status->text().toStdString();
+            settings.calKitNames[name] = (*it).second.fileName;
         }
     }
+}
+
+QString CalKitSettingsDialog::generateLabel(const CalKitSettingsDialog::calKitInfo &inf) {
+    QString status;
+    status = qs(inf.fileName);
+    if(status == "")
+        status = "<no filename>";
+
+    status = status.toHtmlEscaped();
+
+    double startFreqHz = inf.data.values.begin()->first;
+    double stopFreqHz = inf.data.values.rbegin()->first;
+    status = "<pre>" + status
+            + qs(ssprintf(256, "\n   <b>%8.3f</b> MHz - <b>%8.3f</b> MHz, <b>%d</b> points</pre>",
+                               startFreqHz*1e-6, stopFreqHz*1e-6, (int)inf.data.values.size()));
+    return status;
 }

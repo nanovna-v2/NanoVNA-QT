@@ -14,6 +14,7 @@ class CalKitSettingsDialog : public QDialog
 
     struct calKitInfo {
         Ui::CalKitSettingsWidget ui;
+        string fileName;
         SParamSeries data;
         bool useIdeal;
     };
@@ -24,6 +25,7 @@ public:
     void fromSettings(const CalKitSettings& settings);
     void toSettings(CalKitSettings& settings);
 
+    QString generateLabel(const calKitInfo& inf);
     map<string, calKitInfo> info;
 private:
     Ui::CalKitSettingsDialog *ui;
