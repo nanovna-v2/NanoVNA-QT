@@ -383,8 +383,7 @@ void MainWindow::updatePortExtension() {
     ui->t_ext1->setText(qs(ssprintf(32, "%.0f ps", round(portExt1Seconds*1e12))));
     ui->t_ext2->setText(qs(ssprintf(32, "%.0f ps", round(portExt2Seconds*1e12))));
     ui->t_extz->setText(qs(ssprintf(32, "%.2f", portExtZ0)));
-    for(int i=0;i<vna->nPoints;i++)
-        updateViews(i);
+    updateViews(-1);
 }
 
 static string calFileVer = "calFileVersion 1";
@@ -748,6 +747,22 @@ complex<double> calculatePortExt(complex<double> refl, complex<double> Tcable, d
 }
 
 void MainWindow::updateViews(int freqIndex) {
+    computeViews(freqIndex);
+    if(ui->actionDisable_chart_update->isChecked()) return;
+    nv.updateViews(freqIndex);
+
+    time_t t = time(nullptr);
+    if(abs(int64_t(t) - int64_t(lastDTFUpdate)) >= 1)
+        dtf.updateValues(nv.values);
+    lastDTFUpdate = t;
+}
+
+void MainWindow::computeViews(int freqIndex) {
+    if(freqIndex < 0) {
+        for(int i=0; i<vna->nPoints; i++)
+            computeViews(i);
+        return;
+    }
     if(freqIndex >= (int)nv.values.size()) return;
     if(curCal)
         nv.values.at(freqIndex) = curCal->computeValue(curCalCoeffs.at(freqIndex), this->rawValues.at(freqIndex));
@@ -766,14 +781,6 @@ void MainWindow::updateViews(int freqIndex) {
     nv.values.at(freqIndex)(1, 0) *= polar(1., 2*M_PI*freqHz*(portExt1Seconds+portExt2Seconds));
     // S12
     nv.values.at(freqIndex)(0, 1) *= polar(1., 2*M_PI*freqHz*(portExt1Seconds+portExt2Seconds));
-
-    if(ui->actionDisable_chart_update->isChecked()) return;
-    nv.updateViews(freqIndex);
-
-    time_t t = time(nullptr);
-    if(abs(int64_t(t) - int64_t(lastDTFUpdate)) >= 1)
-        dtf.updateValues(nv.values);
-    lastDTFUpdate = t;
 }
 
 void MainWindow::on_actionLoad_triggered() {
@@ -1039,8 +1046,8 @@ void MainWindow::on_actionFine_tune_triggered() {
     dialog.modelsChanged = [&]() {
         for(int i=0; i<vna->nPoints; i++) {
             curCalCoeffs.at(i) = curCal->computeCoefficients(curCalMeasurementsArray.at(i), dialog.newModels.at(i));
-            updateViews(i);
         }
+        updateViews(-1);
     };
     if(dialog.exec() == QDialog::Accepted) {
         curCalStdModelsArray = dialog.newModels;

@@ -117,6 +117,8 @@ public:
     void updateBottomLabels(int marker=-1);
     void updateYAxis(int viewIndex=-1);
     int addMarker(bool removable);
+
+    QPointF _computeChartPoint(int viewIndex, int freqIndex);
 signals:
     void markerChanged(int marker, int newIndex);
 };

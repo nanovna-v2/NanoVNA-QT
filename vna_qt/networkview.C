@@ -191,104 +191,36 @@ void NetworkView::updateViews(int freqIndex) {
 }
 
 void NetworkView::updateView(int viewIndex, int freqIndex) {
-    double period = 1./xAxisStep;
-    double grpDelayScale = period/(2*M_PI) * 1e3;
+    SParamView tmp = this->views.at(viewIndex);
 
+    // if we are updating all frequencies, compute and replace entire chart at once
     if(freqIndex < 0) {
-        for(int i=0;i<(int)values.size();i++) {
-            updateView(viewIndex,i);
+        int sz = (int) values.size();
+        if(tmp.src.type != SParamViewSource::TYPE_COMPLEX) {
+            auto* series = dynamic_cast<QLineSeries*>(tmp.view);
+            QVector<QPointF> pts(sz);
+            for(int i=0; i<sz; i++) {
+                pts[i] = _computeChartPoint(viewIndex, i);
+            }
+            series->replace(pts);
+        } else {
+            for(int i=0; i<sz; i++)
+                updateView(viewIndex, i);
         }
         return;
     }
-    double freqHz = xAxisAt(freqIndex)*1e6; // only meaningful in frequency domain
-    SParamView tmp = this->views.at(viewIndex);
-
     VNACalibratedValue val = this->values.at(freqIndex);
     complex<double> entry = val(tmp.src.row,tmp.src.col);
-    double z0 = 50;
-    complex<double> Z = -z0*(entry+1.)/(entry-1.);
-    complex<double> Y = -(entry-1.)/(z0*(entry+1.));
 
     if(tmp.src.type == SParamViewSource::TYPE_COMPLEX) {
+        // smith chart view
         auto* view = dynamic_cast<PolarView*>(tmp.view);
         view->points.at(freqIndex) = entry;
     } else {
+        // line chart view
         auto* series = dynamic_cast<QLineSeries*>(tmp.view);
-        double y = 0;
-        switch(tmp.src.type) {
-        case SParamViewSource::TYPE_MAG:
-            y = dB(norm(entry));
-            break;
-        case SParamViewSource::TYPE_SWR:
-            y = swr(norm(entry));
-            break;
-        case SParamViewSource::TYPE_PHASE:
-            y = arg(entry)*180./M_PI;
-            break;
-        case SParamViewSource::TYPE_Z_RE:
-            y = Z.real();
-            break;
-        case SParamViewSource::TYPE_Z_IM:
-            y = Z.imag();
-            break;
-        case SParamViewSource::TYPE_Z_MAG:
-            y = abs(Z);
-            break;
-        case SParamViewSource::TYPE_Z_CAP: // capacitance in pF
-            y = -capacitance_inductance(freqHz, Z.imag()) * 1e12;
-            break;
-        case SParamViewSource::TYPE_Z_IND: // inductance in nH
-            y = capacitance_inductance(freqHz, Z.imag()) * 1e9;
-            break;
-        case SParamViewSource::TYPE_Y_RE:
-            y = Y.real() * 1000;
-            break;
-        case SParamViewSource::TYPE_Y_IM:
-            y = Y.imag() * 1000;
-            break;
-        case SParamViewSource::TYPE_Y_MAG:
-            y = abs(Y) * 1000;
-            break;
-        case SParamViewSource::TYPE_Y_CAP: // capacitance in pF
-            y = -capacitance_inductance_Y(freqHz, Y.imag()) * 1e12;
-            break;
-        case SParamViewSource::TYPE_Y_IND: // inductance in nH
-            y = capacitance_inductance_Y(freqHz, Y.imag()) * 1e9;
-            break;
-        case SParamViewSource::TYPE_GRPDELAY:
-        {
-            if(freqIndex>0) {
-                VNACalibratedValue prevVal = this->values.at(freqIndex-1);
-                complex<double> prevEntry = prevVal(tmp.src.row,tmp.src.col);
-                y = arg(prevEntry) - arg(entry);
-                if(y>=M_PI) y-=2*M_PI;
-                if(y<-M_PI) y+=2*M_PI;
-            } else y=0;
-            y *= grpDelayScale;
-            break;
-        }
-        default: assert(false);
-        }
-
-        // clamp values to avoid enlarging labels
-        switch(tmp.src.type) {
-            case SParamViewSource::TYPE_Z_CAP:
-            case SParamViewSource::TYPE_Z_IND:
-            case SParamViewSource::TYPE_Y_CAP:
-            case SParamViewSource::TYPE_Y_IND:
-                if(y < 0) y = 0;
-                if(y > 999) y = 999;
-                break;
-            case SParamViewSource::TYPE_Z_RE:
-            case SParamViewSource::TYPE_Z_IM:
-            case SParamViewSource::TYPE_Z_MAG:
-                if(y < -999) y = -999;
-                if(y > 999) y = 999;
-                break;
-            default: break;
-        }
-
-        series->replace(freqIndex,series->at(freqIndex).x(), y);
+        QPointF pt = _computeChartPoint(viewIndex, freqIndex);
+        series->replace(freqIndex,pt);
     }
 }
 
@@ -432,5 +364,92 @@ int NetworkView::addMarker(bool removable) {
     auto* layout = dynamic_cast<QBoxLayout*>(this->sliderContainer);
     layout->insertWidget(0, ms);
     return newId;
+}
+
+QPointF NetworkView::_computeChartPoint(int viewIndex, int freqIndex) {
+    double period = 1./xAxisStep;
+    double grpDelayScale = period/(2*M_PI) * 1e3;
+    SParamView tmp = this->views.at(viewIndex);
+
+    VNACalibratedValue val = this->values.at(freqIndex);
+    complex<double> entry = val(tmp.src.row,tmp.src.col);
+    double z0 = 50;
+    complex<double> Z = -z0*(entry+1.)/(entry-1.);
+    complex<double> Y = -(entry-1.)/(z0*(entry+1.));
+    double y = 0;
+    double freqHz = xAxisAt(freqIndex)*1e6; // only meaningful in frequency domain
+    switch(tmp.src.type) {
+    case SParamViewSource::TYPE_MAG:
+        y = dB(norm(entry));
+        break;
+    case SParamViewSource::TYPE_SWR:
+        y = swr(norm(entry));
+        break;
+    case SParamViewSource::TYPE_PHASE:
+        y = arg(entry)*180./M_PI;
+        break;
+    case SParamViewSource::TYPE_Z_RE:
+        y = Z.real();
+        break;
+    case SParamViewSource::TYPE_Z_IM:
+        y = Z.imag();
+        break;
+    case SParamViewSource::TYPE_Z_MAG:
+        y = abs(Z);
+        break;
+    case SParamViewSource::TYPE_Z_CAP: // capacitance in pF
+        y = -capacitance_inductance(freqHz, Z.imag()) * 1e12;
+        break;
+    case SParamViewSource::TYPE_Z_IND: // inductance in nH
+        y = capacitance_inductance(freqHz, Z.imag()) * 1e9;
+        break;
+    case SParamViewSource::TYPE_Y_RE:
+        y = Y.real() * 1000;
+        break;
+    case SParamViewSource::TYPE_Y_IM:
+        y = Y.imag() * 1000;
+        break;
+    case SParamViewSource::TYPE_Y_MAG:
+        y = abs(Y) * 1000;
+        break;
+    case SParamViewSource::TYPE_Y_CAP: // capacitance in pF
+        y = -capacitance_inductance_Y(freqHz, Y.imag()) * 1e12;
+        break;
+    case SParamViewSource::TYPE_Y_IND: // inductance in nH
+        y = capacitance_inductance_Y(freqHz, Y.imag()) * 1e9;
+        break;
+    case SParamViewSource::TYPE_GRPDELAY:
+    {
+        if(freqIndex>0) {
+            VNACalibratedValue prevVal = this->values.at(freqIndex-1);
+            complex<double> prevEntry = prevVal(tmp.src.row,tmp.src.col);
+            y = arg(prevEntry) - arg(entry);
+            if(y>=M_PI) y-=2*M_PI;
+            if(y<-M_PI) y+=2*M_PI;
+        } else y=0;
+        y *= grpDelayScale;
+        break;
+    }
+    default: assert(false);
+    }
+
+    // clamp values to avoid enlarging labels
+    switch(tmp.src.type) {
+        case SParamViewSource::TYPE_Z_CAP:
+        case SParamViewSource::TYPE_Z_IND:
+        case SParamViewSource::TYPE_Y_CAP:
+        case SParamViewSource::TYPE_Y_IND:
+            if(y < 0) y = 0;
+            if(y > 999) y = 999;
+            break;
+        case SParamViewSource::TYPE_Z_RE:
+        case SParamViewSource::TYPE_Z_IM:
+        case SParamViewSource::TYPE_Z_MAG:
+            if(y < -999) y = -999;
+            if(y > 999) y = 999;
+            break;
+        default: break;
+    }
+    return QPointF(xAxisAt(freqIndex), y);
 }
 

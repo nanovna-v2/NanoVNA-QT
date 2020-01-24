@@ -179,6 +179,9 @@ private slots:
     // update a single point on all views in this->views
     void updateViews(int freqIndex);
 
+    // compute calibrated values but do not refresh widgets; called by updateViews()
+    void computeViews(int freqIndex);
+
     // called when the vna background thread encounters an error
     void handleBackgroundError(QString msg);
 
