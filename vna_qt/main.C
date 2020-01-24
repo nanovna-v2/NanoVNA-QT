@@ -11,8 +11,7 @@ int main(int argc, char *argv[])
     qRegisterMetaType<CalKitSettings>("CalKitSettings");
     qRegisterMetaTypeStreamOperators<CalKitSettings>("CalKitSettings");
 
-    QCoreApplication::setOrganizationName("xaxaxa Development Ltd");
-    QCoreApplication::setApplicationName("xaVNA QT GUI");
+    QCoreApplication::setApplicationName("NanoVNA QT GUI");
 
     QApplication app(argc, argv);
     app.setStyle("fusion");
