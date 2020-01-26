@@ -51,7 +51,9 @@ SOURCES +=\
     calkitsettings.C \
     networkview.C \
     dtfwindow.C \
-    calibrationfinetunedialog.C
+    calibrationfinetunedialog.C \
+    firmwareupdater.C \
+    firmwareupdatedialog.C
 
 HEADERS  += \
     polarview.H \
@@ -67,7 +69,9 @@ HEADERS  += \
     calkitsettings.H \
     networkview.H \
     dtfwindow.H \
-    calibrationfinetunedialog.H
+    calibrationfinetunedialog.H \
+    firmwareupdater.H \
+    firmwareupdatedialog.H
 
 FORMS    += mainwindow.ui \
     markerslider.ui \
@@ -79,7 +83,8 @@ FORMS    += mainwindow.ui \
     calkitsettingswidget.ui \
     dtfwindow.ui \
     graphlimitsdialog.ui \
-    calibrationfinetunedialog.ui
+    calibrationfinetunedialog.ui \
+    firmwareupdatedialog.ui
 
 TRANSLATIONS = languages/vna_qt_zh.ts
 DISTFILES += languages/vna_qt_zh.ts

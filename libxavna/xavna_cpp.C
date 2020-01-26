@@ -34,7 +34,12 @@ namespace xaxaxa {
 			dev = tmp[0];
 		}
 		_dev = xavna_open(dev.c_str());
-		if(!_dev) throw runtime_error(strerror(errno));
+		if(!_dev) {
+			// ENOMEDIUM indicates DFU mode
+			if(errno == ENOMEDIUM)
+				throw logic_error("DFU mode");
+			throw runtime_error(strerror(errno));
+		}
 
 		bool a = isAutoSweep();
 		if(a != _lastDeviceIsAutosweep) {

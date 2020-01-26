@@ -15,6 +15,7 @@
 #include "calkitsettingsdialog.H"
 #include "ui_graphlimitsdialog.h"
 #include "calibrationfinetunedialog.H"
+#include "firmwareupdatedialog.H"
 #include <xavna/calibration.H>
 #include <xavna/xavna_cpp.H>
 #include <xavna/xavna_generic.H>
@@ -267,6 +268,19 @@ void MainWindow::openDevice(string dev) {
         if(vna->isTR()) ui->actionSwap_ports->setChecked(false);
         vna->startScan();
         enableUI(true);
+    } catch(logic_error& ex) {
+        if(strcmp(ex.what(), "DFU mode") == 0) {
+            auto resp = QMessageBox::question(this, "DFU mode", "Device is in DFU mode. Flash a new firmware?");
+            if(resp == QMessageBox::Yes) {
+                QString fileName = QFileDialog::getOpenFileName(this,
+                        tr("Open binary file"), "",
+                        tr("Raw binary file (*.bin);;All Files (*)"));
+                if (fileName.isEmpty()) return;
+                updateFirmware(dev, fileName.toStdString());
+            }
+        } else {
+            QMessageBox::critical(this,"Exception",ex.what());
+        }
     } catch(exception& ex) {
         QMessageBox::critical(this,"Exception",ex.what());
     }
@@ -552,6 +566,12 @@ QString MainWindow::fileDialogSave(QString title, QString filter, QString defaul
 
 string MainWindow::freqStr(double freqHz) {
     return ssprintf(32, "%.2f", freqHz*freqScale);
+}
+
+void MainWindow::updateFirmware(string dev, string fileName) {
+    FirmwareUpdateDialog dialog(this);
+    dialog.beginUploadFirmware(dev, fileName);
+    dialog.exec();
 }
 
 void MainWindow::hideEvent(QHideEvent *) {

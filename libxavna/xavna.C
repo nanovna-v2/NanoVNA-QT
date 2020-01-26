@@ -243,6 +243,19 @@ public:
 			tr = true;
 			fprintf(stderr, "detected autosweep T/R vna\n");
 			fflush(stderr);
+
+			char buf[64];
+			memset(buf, 0, sizeof(buf));
+			write(ttyFD, buf, sizeof(buf));
+			usleep(10000);
+
+			int version = autosweep_read_version();
+			fprintf(stderr, "firmware major version: %d\n", version);
+			if(version == 0xff) {
+				// dfu mode
+				close(ttyFD);
+				throw logic_error("DFU mode");
+			}
 			return;
 		}
 
@@ -265,6 +278,20 @@ public:
 		
 		if(!tr)
 			set_if_freq(700);
+	}
+	// returns firmware major version
+	int autosweep_read_version() {
+		u8 buf[] = {
+			// read register 0xf3
+			0x10, 0xf3
+		};
+		if(writeAll(ttyFD,buf,sizeof(buf)) != (int)sizeof(buf))
+			return -1;
+
+		u8 rBuf[1];
+		if(read(ttyFD, rBuf, 1) != 1)
+			return -1;
+		return rBuf[0];
 	}
 	virtual bool is_tr() {
 		return tr;
@@ -529,6 +556,9 @@ extern "C" {
 		if(it != xavna_virtual_devices.end()) return (*it).second(dev);
 		try {
 			return xavna_default_constructor(dev);
+		} catch(logic_error& ex) {
+			errno = ENOMEDIUM;
+			return NULL;
 		} catch(exception& ex) {
 			return NULL;
 		}

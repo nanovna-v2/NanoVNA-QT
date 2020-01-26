@@ -159,8 +159,9 @@ public:
 
     QString fileDialogSave(QString title, QString filter, QString defaultSuffix, QString defaultFile="");
 
-
     string freqStr(double freqHz);
+
+    void updateFirmware(string dev, string fileName);
 
 protected:
     void hideEvent(QHideEvent* event);
