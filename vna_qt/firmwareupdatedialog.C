@@ -58,5 +58,5 @@ void FirmwareUpdateDialog::updateProgress(int progress) {
         }
         return;
     }
-    ui->l_progress->setText(qs(ssprintf(128, "%d KiB", progress)));
+    ui->l_progress->setText(qs(ssprintf(128, "%d KiB", progress/1024)));
 }

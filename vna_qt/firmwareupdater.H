@@ -19,7 +19,7 @@ public:
     // reader is a function that will read up to len bytes into buf, similar to read(2).
     // cb is called at a set interval to indicate progress.
     // progress is bytes sent. When cb is called with progress = -1, the operation is complete,
-    // and you must call endUploadFirmware() to check for errors.
+    // and you can call endUploadFirmware() from another thread to check for errors.
     void beginUploadFirmware(uint32_t dstAddr,
                              const function<int(uint8_t* buf, int len)>& reader,
                              const function<void(int progress)>& cb);

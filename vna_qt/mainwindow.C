@@ -274,7 +274,7 @@ void MainWindow::openDevice(string dev) {
             if(resp == QMessageBox::Yes) {
                 QString fileName = QFileDialog::getOpenFileName(this,
                         tr("Open binary file"), "",
-                        tr("Raw binary file (*.bin);;All Files (*)"));
+                        tr("Raw binary file *.bin (*.bin);;All Files (*)"));
                 if (fileName.isEmpty()) return;
                 updateFirmware(dev, fileName.toStdString());
             }
