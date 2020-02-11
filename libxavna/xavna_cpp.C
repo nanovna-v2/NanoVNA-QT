@@ -210,7 +210,7 @@ namespace xaxaxa {
 		uint32_t last_measurementCnt = _measurementCnt;
 		int lastFreqIndex = -1;
 		int measurementEndPoint = -1;
-		int chunkPoints = 8;
+		int chunkPoints = 16;
 		int nValues = this->nValues;
 		int collectDataState = 0;
 		int cnt = 0;
@@ -222,7 +222,7 @@ namespace xaxaxa {
 		xavna_set_autosweep(_dev, startFreqHz, stepFreqHz, nPoints, nValues);
 		while(!_shouldExit) {
 			fflush(stdout);
-			int chunkValues = chunkPoints * nValues;
+			int chunkValues = chunkPoints;
 			autoSweepDataPoint values[chunkValues];
 
 			// read a chunk of values
