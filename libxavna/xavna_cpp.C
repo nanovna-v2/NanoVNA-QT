@@ -35,8 +35,8 @@ namespace xaxaxa {
 		}
 		_dev = xavna_open(dev.c_str());
 		if(!_dev) {
-			// ENOMEDIUM indicates DFU mode
-			if(errno == ENOMEDIUM)
+			// ECONNREFUSED indicates DFU mode
+			if(errno == ECONNREFUSED)
 				throw logic_error("DFU mode");
 			throw runtime_error(strerror(errno));
 		}

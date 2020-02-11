@@ -3,6 +3,7 @@
 #include <errno.h>
 #include <string.h>
 #include <unistd.h>
+#include <time.h>
 
 // this dependency can be removed if you provide implementations
 // of qToLittleEndian() and qFromLittleEndian()
@@ -144,22 +145,12 @@ void* FirmwareUpdater::_flashThread(void* v) {
 }
 
 
-static inline timespec currTime() {
-    timespec ts;
-    clock_gettime(CLOCK_MONOTONIC, &ts);
-    return ts;
-}
-static int64_t timediff(const timespec& start, const timespec& stop) {
-    int64_t tmp = stop.tv_nsec - start.tv_nsec;
-    tmp += int64_t(stop.tv_sec - start.tv_sec) * 1000000000LL;
-    return tmp;
-}
 void* FirmwareUpdater::flashThread() {
     constexpr int bufSize = 255;
     uint8_t buf[bufSize];
     int outstanding = 0;
     int progress = 0;
-    auto lastNotify = currTime();
+    auto lastNotify = time(nullptr);
 
     while(true) {
         auto br = _reader(buf, bufSize);
@@ -173,8 +164,8 @@ void* FirmwareUpdater::flashThread() {
             goto fail;
 
         progress += br;
-        auto t = currTime();
-        if(timediff(lastNotify, t) > 100000000) {
+        auto t = time(nullptr);
+        if(t - lastNotify >= 1) {
             lastNotify = t;
             _cb(progress);
         }

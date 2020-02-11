@@ -557,7 +557,7 @@ extern "C" {
 		try {
 			return xavna_default_constructor(dev);
 		} catch(logic_error& ex) {
-			errno = ENOMEDIUM;
+			errno = ECONNREFUSED;
 			return NULL;
 		} catch(exception& ex) {
 			return NULL;

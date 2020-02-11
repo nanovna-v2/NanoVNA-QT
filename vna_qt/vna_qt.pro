@@ -92,7 +92,7 @@ DISTFILES += languages/vna_qt_zh.ts
 RESOURCES += \
     resources.qrc
 
-LIBS += -L$$PWD/../libxavna/.libs/ -L/usr/local/lib/ -lxavna -lfftw3
+LIBS += -L$$PWD/../libxavna/.libs/ -L/usr/local/lib/ -lxavna -lfftw3 -lpthread
 android: LIBS += -L$$PWD/../lib
 
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../libxavna/xavna_mock_ui/release/ -lxavna_mock_ui
