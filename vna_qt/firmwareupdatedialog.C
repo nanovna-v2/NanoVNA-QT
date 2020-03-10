@@ -22,14 +22,21 @@ FirmwareUpdateDialog::~FirmwareUpdateDialog()
 
 void FirmwareUpdateDialog::beginUploadFirmware(string dev, string file) {
     ui->buttonBox->setDisabled(true);
-    _fd = ::open(file.c_str(), O_RDONLY);
+    
+    /*_fd = ::open(file.c_str(), O_RDONLY);
     if(_fd < 0)
+        throw runtime_error(strerror(errno));*/
+
+    filePtr = fopen(file.c_str(), "rb");
+    if(filePtr == nullptr)
         throw runtime_error(strerror(errno));
+
 
     updater = new FirmwareUpdater();
     updater->open(dev.c_str());
     updater->beginUploadFirmware(0x08004000, [this](uint8_t* buf, int len) {
-        return int(::read(_fd, buf, size_t(len)));
+        //return int(::read(_fd, buf, size_t(len)));
+        return int(fread(buf, 1, size_t(len), this->filePtr));
     },
     [this](int progress){
         QMetaObject::invokeMethod(this, "updateProgress", Qt::QueuedConnection, Q_ARG(int, progress));
@@ -46,6 +53,8 @@ void FirmwareUpdateDialog::updateProgress(int progress) {
         delete updater;
         updater = nullptr;
 
+        fclose(filePtr);
+
         if(ex != nullptr) {
             QString msg = "An error occurred during firmware update:\n\n";
             msg += ex->what();
@@ -53,10 +62,14 @@ void FirmwareUpdateDialog::updateProgress(int progress) {
             QMessageBox::critical(this, "Error", msg);
             this->accept();
         } else {
-            ui->l_progress->setText("Done");
+            ui->l_progress->setText("Done\n" + ui->l_progress->text());
             ui->buttonBox->setDisabled(false);
         }
         return;
     }
-    ui->l_progress->setText(qs(ssprintf(128, "%d KiB", progress/1024)));
+    string msg;
+    if(progress < 1024)
+        msg = ssprintf(128, "%d bytes", progress);
+    else msg = ssprintf(128, "%d KiB", progress/1024);
+    ui->l_progress->setText(qs(msg));
 }

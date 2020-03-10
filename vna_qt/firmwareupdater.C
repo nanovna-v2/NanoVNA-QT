@@ -156,14 +156,20 @@ void* FirmwareUpdater::flashThread() {
         auto br = _reader(buf, bufSize);
         if(br < 0)
             goto fail;
-        if(br == 0)
+        if(br == 0) {
+            if(progress < 1024) {
+                auto ex = new runtime_error("EOF reading from file at " + to_string(progress) + " bytes");
+                _cb(-1);
+                return ex;
+            }
             break;
+        }
+        progress += br;
 
         int res = _sendBytes(buf, int(br));
         if(res < 0)
             goto fail;
 
-        progress += br;
         auto t = time(nullptr);
         if(t - lastNotify >= 1) {
             lastNotify = t;
@@ -177,6 +183,12 @@ void* FirmwareUpdater::flashThread() {
             outstanding--;
         }
     }
+    if(progress == 0) {
+        auto ex = new runtime_error("Read 0 bytes from file!");
+        _cb(-1);
+        return ex;
+    }
+    _cb(progress);
     while(outstanding > 0) {
         if(_waitSend() < 0)
             goto fail;

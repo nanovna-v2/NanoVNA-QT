@@ -3,6 +3,8 @@
 
 #include <QDialog>
 #include <string>
+#include <stdio.h>
+
 using namespace std;
 namespace Ui {
 class FirmwareUpdateDialog;
@@ -24,7 +26,8 @@ public slots:
 private:
     Ui::FirmwareUpdateDialog *ui;
     FirmwareUpdater* updater = nullptr;
-    int _fd = -1;
+    //int _fd = -1;
+    FILE* filePtr = nullptr;
 };
 
 #endif // FIRMWAREUPDATEDIALOG_H
