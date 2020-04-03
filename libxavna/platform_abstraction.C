@@ -80,7 +80,9 @@ void xavna_drainfd(int fd) {
 	pfd.fd = fd;
 	pfd.events = POLLIN;
 	while(poll(&pfd,1,0)>0) {
+#ifndef __APPLE__
 		if(pfd.revents & POLLRDHUP) break;
+#endif
 		if(pfd.revents & POLLERR) break;
 		if(pfd.revents & POLLHUP) break;
 		if(pfd.revents & POLLNVAL) break;
