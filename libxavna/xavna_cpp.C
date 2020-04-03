@@ -4,8 +4,10 @@
 #include "include/workarounds.H"
 #include <pthread.h>
 #include <array>
+#include <chrono>
 
 using namespace std;
+using namespace std::chrono;
 
 namespace xaxaxa {
     static void* _mainThread_(void* param);
@@ -210,7 +212,8 @@ namespace xaxaxa {
 		uint32_t last_measurementCnt = _measurementCnt;
 		int lastFreqIndex = -1;
 		int measurementEndPoint = -1;
-		int chunkPoints = 16;
+		double currChunkPoints = 16.;
+		int chunkPoints = (int)currChunkPoints;
 		int nValues = this->nValues;
 		int collectDataState = 0;
 		int cnt = 0;
@@ -226,10 +229,13 @@ namespace xaxaxa {
 			autoSweepDataPoint values[chunkValues];
 
 			// read a chunk of values
+			steady_clock::time_point t1 = steady_clock::now();
 			if(xavna_read_autosweep(_dev, values, chunkValues)<0) {
 				backgroundErrorCallback(runtime_error("xavna_read_autosweep failed: " + string(strerror(errno))));
 				return NULL;
 			}
+			steady_clock::time_point t2 = steady_clock::now();
+			double readChunkTimeSeconds = duration_cast<duration<double>>(t2 - t1).count();
 			
 			// process chunk
 			for(int i=0; i<chunkValues; i++) {
@@ -298,6 +304,16 @@ namespace xaxaxa {
 				xavna_set_autosweep(_dev, startFreqHz, stepFreqHz, nPoints, nValues);
 				collectDataState = 1;
 			}
+			
+			// adjust chunk size to target chunkTime 50ms
+			// if the read took less than 20ms, treat it as 20ms
+			if(readChunkTimeSeconds < 0.02) readChunkTimeSeconds = 0.02;
+			double newChunkPoints = double(chunkPoints)/readChunkTimeSeconds * 0.05;
+			if(newChunkPoints > 128) newChunkPoints = 128;
+			if(newChunkPoints < 8) newChunkPoints = 8;
+			currChunkPoints = currChunkPoints * 0.7 + newChunkPoints * 0.3;
+			chunkPoints = (int)currChunkPoints;
+			fprintf(stderr, "chunkPoints %d\n", chunkPoints);
 		}
 		return NULL;
 	}
