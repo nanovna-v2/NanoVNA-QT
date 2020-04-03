@@ -31,10 +31,10 @@ install_name_tool -change /usr/local/lib/libxavna.0.dylib @executable_path/../Fr
 install_name_tool -change /usr/local/lib/libxavna.0.dylib @executable_path/../Frameworks/libxavna.0.dylib Frameworks/libxavna_mock_ui.1.dylib
 popd
 
-rm -rf dmg_contents ../xaVNA_MacOS.dmg tmp.dmg
+rm -rf dmg_contents ../NanoVNA_QT_MacOS.dmg tmp.dmg
 mkdir dmg_contents
 cp -a vna_qt.app dmg_contents/
 
-hdiutil create tmp.dmg -ov -volname "xaVNA GUI" -fs HFS+ -srcfolder dmg_contents
-hdiutil convert tmp.dmg -format UDZO -o ../xaVNA_MacOS.dmg
+hdiutil create tmp.dmg -ov -volname "NanoVNA QT GUI" -fs HFS+ -srcfolder dmg_contents
+hdiutil convert tmp.dmg -format UDZO -o ../NanoVNA_QT_MacOS.dmg
 
