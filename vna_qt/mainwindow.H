@@ -55,10 +55,11 @@ private:
 
 public:
     const char* calButtonDoneStyle = "background-color: #9999ff";
+    static const int refreshIntervalMs = 50;
 
     VNADevice* vna = nullptr;
     ImpedanceDisplay* impdisp = nullptr;
-    QTimer* timer = nullptr;
+    QTimer* refreshTimer = nullptr;
     PolarView* polarView = nullptr;
     NetworkView nv;
     DTFWindow dtf;

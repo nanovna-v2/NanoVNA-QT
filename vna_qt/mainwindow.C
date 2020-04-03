@@ -53,7 +53,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     vna = new VNADevice();
     impdisp = new ImpedanceDisplay();
-    timer = new QTimer();
+    refreshTimer = new QTimer();
 
     nv.init(ui->w_bottom->layout());
     nv.xAxisValueStr = [](double val) {
@@ -79,7 +79,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ((QBoxLayout*)ui->dock_impedance_contents->layout())->insertWidget(0,impdisp);
 
-    connect(timer, &QTimer::timeout, [this](){
+    connect(refreshTimer, &QTimer::timeout, [this](){
         if(!ui->actionDisable_polarView_refresh->isChecked())
             this->polarView->repaint();
         //this->chartView->update();
@@ -87,7 +87,6 @@ MainWindow::MainWindow(QWidget *parent) :
         updateValueDisplays();
         nv.updateBottomLabels();
     });
-    timer->start(200);
 
     setAttribute(Qt::WA_DeleteOnClose);
 
@@ -102,7 +101,7 @@ MainWindow::~MainWindow()
     vna->stopScan();
     vna->close();
 
-    delete timer;
+    delete refreshTimer;
     //delete chartView;
     //delete polarView;
     delete vna;
@@ -268,6 +267,7 @@ void MainWindow::openDevice(string dev) {
         if(vna->isTR()) ui->actionSwap_ports->setChecked(false);
         vna->startScan();
         enableUI(true);
+        refreshTimer->start(refreshIntervalMs);
     } catch(logic_error& ex) {
         if(strcmp(ex.what(), "DFU mode") == 0) {
             auto resp = QMessageBox::question(this, "DFU mode", "Device is in DFU mode. Flash a new firmware?");
@@ -289,8 +289,9 @@ void MainWindow::openDevice(string dev) {
 
 void MainWindow::handleBackgroundError(QString msg) {
     vna->close();
-    QMessageBox::critical(this, "Error", msg);
     enableUI(false);
+    refreshTimer->stop();
+    QMessageBox::critical(this, "Error", msg);
 }
 
 void MainWindow::s11MeasurementCompleted(QString fileName) {
