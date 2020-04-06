@@ -1,5 +1,5 @@
-#ifndef __XAVNA_CALIBRATION_H
-#define __XAVNA_CALIBRATION_H
+#pragma once
+
 #include <array>
 #include <complex>
 #include <eigen3/Eigen/Dense>
@@ -133,4 +133,4 @@ inline complex<double> cascade_reflection(const array<complex<double>, 4>& S, co
     return s11 + s12*s21*refl/(1.-s22*refl);
 }
 
-#endif
+

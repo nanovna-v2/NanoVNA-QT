@@ -1,5 +1,5 @@
-#ifndef __XAVNA_COMMON_H
-#define __XAVNA_COMMON_H
+#pragma once
+
 #include <eigen3/Eigen/Dense>
 #include <eigen3/Eigen/StdVector>
 #include <vector>
@@ -25,5 +25,3 @@ inline Matrix2cd mirror(Matrix2cd a) {
 }
 }
 
-
-#endif

@@ -1,5 +1,5 @@
-#ifndef __XAVNA_H
-#define __XAVNA_H
+#pragma once
+
 extern "C" {
 	struct autoSweepDataPoint {
 		// indexed by [port][real_or_imag]
@@ -60,4 +60,4 @@ extern "C" {
 	// close device handle
 	void xavna_close(void* dev);
 }
-#endif
+

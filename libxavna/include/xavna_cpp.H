@@ -1,5 +1,4 @@
-#ifndef __XAVNA_CPP_H
-#define __XAVNA_CPP_H
+#pragma once
 #include <pthread.h>
 #include <complex>
 #include <vector>
@@ -107,4 +106,4 @@ namespace xaxaxa {
 		void* _runAutoSweep();
 	};
 }
-#endif
+

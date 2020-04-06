@@ -1,5 +1,5 @@
-#ifndef __COMMON_TYPES_H
-#define __COMMON_TYPES_H
+#pragma once
+
 #include <stdint.h>
 
 typedef unsigned long ul;
@@ -12,4 +12,3 @@ typedef uint16_t u16;
 typedef uint8_t u8;
 typedef int8_t s8;
 
-#endif
