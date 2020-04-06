@@ -18,7 +18,7 @@ QTPLUGIN.imageformats += svg
 
 #QMAKE_LFLAGS += --static -lexpat -lz -lXext -lXau -lbsd -lXdmcp
 #QMAKE_LFLAGS += -L../lib -lxavna
-QMAKE_CXXFLAGS += -Wextra --std=c++11
+QMAKE_CXXFLAGS += -Wextra -std=c++11
 QMAKE_CXXFLAGS += -DEIGEN_DONT_VECTORIZE -DEIGEN_DISABLE_UNALIGNED_ARRAY_ASSERT
 android: QMAKE_CXXFLAGS += -I../android_include -DANDROID_WORKAROUNDS
 

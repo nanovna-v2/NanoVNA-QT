@@ -1,7 +1,7 @@
 AC_INIT(vna, version-0.1, private0x01@gmail.com)
 
 if test -z $CXXFLAGS; then
-    CXXFLAGS='-O2 --std=c++0x -fPIC -fwrapv -fno-delete-null-pointer-checks -funsigned-char -fno-strict-aliasing -Wno-pmf-conversions'
+    CXXFLAGS='-O2 -std=c++0x -fPIC -fwrapv -fno-delete-null-pointer-checks -funsigned-char -fno-strict-aliasing -Wno-pmf-conversions'
 fi
 
 AC_PROG_CXX

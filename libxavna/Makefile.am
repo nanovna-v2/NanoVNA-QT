@@ -1,4 +1,4 @@
-AM_CPPFLAGS = -I../include -O2 --std=c++0x -fPIC -fwrapv -fno-delete-null-pointer-checks -funsigned-char -fno-strict-aliasing -Wno-pmf-conversions
+AM_CPPFLAGS = -I../include -O2 -std=c++0x -fPIC -fwrapv -fno-delete-null-pointer-checks -funsigned-char -fno-strict-aliasing -Wno-pmf-conversions
 AM_LDFLAGS = -no-undefined
 lib_LTLIBRARIES = libxavna.la
 libxavna_la_SOURCES = xavna.C xavna_cpp.C calibration.C
