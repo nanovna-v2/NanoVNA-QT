@@ -51,6 +51,14 @@ export QT=/PATH/TO/QT # optional, e.g. ~/qt/5.10.1/gcc_64
 ```
 
 __Mac系统下编译 / Building on mac os__
+
+ MacPorts:
+```bash
+sudo port install NanoVNA-QT
+# result in /Applications/MacPorts/NanoVNA-QT.app
+```
+
+ Homebrew:
 ```bash
 brew install automake libtool make eigen fftw
 cd /PATH/TO/NanoVNA-QT
