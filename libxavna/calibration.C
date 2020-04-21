@@ -63,13 +63,17 @@ public:
         complex<double> cal_thru_leak = y2-cal_thru_leak_r*x2;
         
         complex<double> thru = 1.;
-        if(!noThru) thru = measurements.at(3)(1,0);
+        complex<double> thruModel = 1.;
+        if(!noThru) {
+            thru = measurements.at(3)(1,0);
+            thruModel = calStdModels.at(3)(1,0);
+        }
         
         tmp.conservativeResize(4, 2);
         tmp(2,0) = cal_thru_leak;
         tmp(2,1) = cal_thru_leak_r;
         tmp(3,0) = thru;
-        tmp(3,1) = 0.;
+        tmp(3,1) = thruModel;
         return tmp;
     }
     // given cal coefficients and a raw value, compute S parameters
@@ -82,8 +86,9 @@ public:
         
         complex<double> thru = val(1,0) - (cal_thru_leak + val(0,0)*cal_thru_leak_r);
         complex<double> refThru = coeffs(3,0) - (cal_thru_leak + val(0,0)*cal_thru_leak_r);
+        complex<double> thruModel = coeffs(3,1);
         
-        ret(1,0) = thru/refThru;
+        ret(1,0) = thru/refThru*thruModel;
         ret(0,1) = 0.;
         ret(1,1) = 0.;
         return ret;
