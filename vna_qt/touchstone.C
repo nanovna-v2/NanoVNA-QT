@@ -9,34 +9,10 @@
 
 using namespace std;
 
-#if __cplusplus < 201103L
-  #error This library needs at least a C++11 compliant compiler
-#endif
-
-// append to dst
-int saprintf(string& dst, const char* fmt, ...) {
-    int bytesToAllocate=32;
-    int originalLen=dst.length();
-    while(true) {
-        dst.resize(originalLen+bytesToAllocate);
-        va_list args;
-        va_start(args, fmt);
-        // ONLY WORKS WITH C++11!!!!!!!!
-        // .data() does not guarantee enough space for the null byte before c++11
-        int len = vsnprintf((char*)dst.data()+originalLen, bytesToAllocate+1, fmt, args);
-        va_end(args);
-        if(len>=0 && len <= bytesToAllocate) {
-            dst.resize(originalLen+len);
-            return len;
-        }
-        if(len<=0) bytesToAllocate*=2;
-        else bytesToAllocate = len;
-    }
-}
-
 
 
 string serializeTouchstone(vector<complex<double> > data, double startFreqHz, double stepFreqHz) {
+    scopedCLocale _locale; // use standard number formatting
     string res;
     res += "# MHz S MA R 50\n";
     saprintf(res,"!   freq        S11       \n");
@@ -52,6 +28,7 @@ string serializeTouchstone(vector<complex<double> > data, double startFreqHz, do
 }
 
 string serializeTouchstone(vector<Matrix2cd> data, double startFreqHz, double stepFreqHz) {
+    scopedCLocale _locale; // use standard number formatting
     string res;
     res += "# MHz S MA R 50\n";
     saprintf(res,"!   freq        S11              S21              S12              S22       \n");
@@ -72,6 +49,7 @@ string serializeTouchstone(vector<Matrix2cd> data, double startFreqHz, double st
 
 
 void parseTouchstone(string data, int& nPorts, map<double, MatrixXcd> &results) {
+    scopedCLocale _locale; // use standard number formatting
     istringstream iss(data);
     string line;
 

@@ -9,8 +9,30 @@
 #include <sstream>
 #include <QString>
 #include <time.h>
+#include <locale.h>
+
+
+#if __cplusplus < 201103L
+  #error This library needs at least a C++11 compliant compiler
+#endif
 
 using namespace std;
+
+// when this class is instantiated, the program locale is set to C
+class scopedCLocale {
+public:
+    bool _shouldRevert = true;
+    scopedCLocale() {
+        if(strcmp("C", setlocale(LC_ALL, NULL)) == 0)
+            _shouldRevert = false;
+        setlocale(LC_ALL, "C");
+    }
+    ~scopedCLocale() {
+        if(_shouldRevert)
+            setlocale(LC_ALL, "");
+    }
+};
+
 
 inline QString qs(const string& s) {
     return QString::fromStdString(s);
@@ -74,6 +96,28 @@ inline string ssprintf(int maxLen, const char* fmt, ...) {
     tmp.resize(len);
     return tmp;
 }
+
+// append to dst
+inline int saprintf(string& dst, const char* fmt, ...) {
+    int bytesToAllocate=32;
+    int originalLen=dst.length();
+    while(true) {
+        dst.resize(originalLen+bytesToAllocate);
+        va_list args;
+        va_start(args, fmt);
+        // ONLY WORKS WITH C++11!!!!!!!!
+        // .data() does not guarantee enough space for the null byte before c++11
+        int len = vsnprintf((char*)dst.data()+originalLen, bytesToAllocate+1, fmt, args);
+        va_end(args);
+        if(len>=0 && len <= bytesToAllocate) {
+            dst.resize(originalLen+len);
+            return len;
+        }
+        if(len<=0) bytesToAllocate*=2;
+        else bytesToAllocate = len;
+    }
+}
+
 inline string sstrftime(const char *format, const struct tm &tm) {
     char buf[256] = {0};
     strftime(buf, 256, format, &tm);

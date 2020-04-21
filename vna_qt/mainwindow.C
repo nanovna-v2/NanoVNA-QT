@@ -403,22 +403,23 @@ void MainWindow::updatePortExtension() {
 
 static string calFileVer = "calFileVersion 1";
 string MainWindow::serializeCalibration(const CalibrationInfo &cal) {
+    scopedCLocale _locale; // use standard number formatting
     string tmp;
     tmp.append(calFileVer);
     tmp += '\n';
     tmp.append(cal.calName + "\n");
-    tmp.append(to_string(cal.nPoints)+" "+to_string(cal.startFreqHz)+" "+to_string(cal.stepFreqHz));
-    tmp.append(" "+to_string(cal.attenuation1)+" "+to_string(cal.attenuation2));
+    saprintf(tmp, "%d %f %f ", cal.nPoints, cal.startFreqHz, cal.stepFreqHz);
+    saprintf(tmp, "%d %d", cal.attenuation1, cal.attenuation2);
     tmp += '\n';
     for(auto& calstd:cal.measurements) {
+        if(calstd.first.length() == 0)
+            continue;
         tmp.append(calstd.first);
         tmp += '\n';
         for(const VNARawValue& val:calstd.second) {
             int sz=val.rows()*val.cols();
             for(int i=0;i<sz;i++) {
-                tmp.append(to_string(val(i).real()) + " ");
-                tmp.append(to_string(val(i).imag()));
-                tmp += ' ';
+                saprintf(tmp, "%f %f ", val(i).real(), val(i).imag());
             }
             tmp += '\n';
         }
@@ -427,6 +428,7 @@ string MainWindow::serializeCalibration(const CalibrationInfo &cal) {
 }
 
 CalibrationInfo MainWindow::deserializeCalibration(QTextStream &inp) {
+    scopedCLocale _locale; // use standard number formatting
     CalibrationInfo ret;
     string versionStr = inp.readLine().toStdString();
     if(versionStr != calFileVer) {
@@ -453,6 +455,9 @@ CalibrationInfo MainWindow::deserializeCalibration(QTextStream &inp) {
             }
             values.push_back(value);
         }
+        // discard the rest of the line
+        inp.readLine();
+
         ret.measurements[calstd.toStdString()] = values;
         fprintf(stderr, "found cal standard %s\n", calstd.toUtf8().data());
         fflush(stderr);
