@@ -180,7 +180,7 @@
      <item row="0" column="1">
       <widget class="QDoubleSpinBox" name="t_start">
        <property name="minimum">
-        <double>0.100000000000000</double>
+        <double>0.010000000000000</double>
        </property>
        <property name="maximum">
         <double>4400.000000000000000</double>
@@ -193,7 +193,7 @@
      <item row="1" column="1">
       <widget class="QDoubleSpinBox" name="t_stop">
        <property name="minimum">
-        <double>0.100000000000000</double>
+        <double>0.010000000000000</double>
        </property>
        <property name="maximum">
         <double>4400.000000000000000</double>
