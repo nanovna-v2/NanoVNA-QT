@@ -285,7 +285,11 @@ void MainWindow::openDevice(string dev) {
                         tr("Open binary file"), "",
                         tr("Raw binary file *.bin (*.bin);;All Files (*)"));
                 if (fileName.isEmpty()) return;
-                updateFirmware(dev, fileName.toStdString());
+		try {
+                    updateFirmware(dev, fileName.toStdString());
+                } catch(exception& ex) {
+                    QMessageBox::critical(this,"Exception",ex.what());
+		}
             }
         } else {
             QMessageBox::critical(this,"Exception",ex.what());
