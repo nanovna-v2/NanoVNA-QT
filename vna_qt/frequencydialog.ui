@@ -179,6 +179,9 @@
      </item>
      <item row="0" column="1">
       <widget class="QDoubleSpinBox" name="t_start">
+       <property name="decimals">
+        <number>6</number>
+       </property>
        <property name="minimum">
         <double>0.010000000000000</double>
        </property>
@@ -192,6 +195,9 @@
      </item>
      <item row="1" column="1">
       <widget class="QDoubleSpinBox" name="t_stop">
+       <property name="decimals">
+        <number>6</number>
+       </property>
        <property name="minimum">
         <double>0.010000000000000</double>
        </property>

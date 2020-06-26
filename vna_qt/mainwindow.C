@@ -57,7 +57,16 @@ MainWindow::MainWindow(QWidget *parent) :
 
     nv.init(ui->w_bottom->layout());
     nv.xAxisValueStr = [](double val) {
-        return ssprintf(32, "%.2f MHz", val);
+        if(val < 0.999999)
+            return ssprintf(32, "%.03f kHz", val*1000.);
+        else if(val <= 9.99999)
+            return ssprintf(32, "%.05f MHz", val);
+        else if(val <= 99.9999)
+            return ssprintf(32, "%.04f MHz", val);
+        else if(val < 999.999)
+            return ssprintf(32, "%.03f MHz", val);
+        else
+            return ssprintf(32, "%.02f MHz", val);
     };
     connect(&nv, &NetworkView::markerChanged, [this](int marker, int /*index*/) {
         if(marker == 0) updateValueDisplays();

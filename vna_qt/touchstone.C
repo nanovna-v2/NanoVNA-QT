@@ -21,7 +21,7 @@ string serializeTouchstone(vector<complex<double> > data, double startFreqHz, do
         double freqMHz = freqHz*1e-6;
         complex<double> val = data[i];
         double c = 180./M_PI;
-        saprintf(res,"%8.3f %8.5f %7.2f\n",
+        saprintf(res,"%8.6f %8.5f %7.2f\n",
                  freqMHz, abs(val), arg(val)*c);
     }
     return res;
@@ -37,7 +37,7 @@ string serializeTouchstone(vector<Matrix2cd> data, double startFreqHz, double st
         double freqMHz = freqHz*1e-6;
         Matrix2cd val = data[i];
         double c = 180./M_PI;
-        saprintf(res,"%8.3f %8.5f %7.2f %8.5f %7.2f %8.5f %7.2f %8.5f %7.2f\n",
+        saprintf(res,"%8.6f %8.5f %7.2f %8.5f %7.2f %8.5f %7.2f %8.5f %7.2f\n",
                  freqMHz,
                  abs(val(0,0)), arg(val(0,0))*c,
                  abs(val(1,0)), arg(val(1,0))*c,

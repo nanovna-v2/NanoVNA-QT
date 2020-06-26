@@ -66,7 +66,7 @@ void FrequencyDialog::updateLabels() {
     double stepSize = ( ui->t_stop->value() - ui->t_start->value()) / ui->t_points->value();
 
     if(!std::isnan(stepSize) && stepSize>0)
-        ui->l_end->setText(qs(ssprintf(32, "%.2f", stepSize)));
+        ui->l_end->setText(qs(ssprintf(32, "%.6f", stepSize)));
 }
 
 void FrequencyDialog::on_slider_power_valueChanged(int value) {
