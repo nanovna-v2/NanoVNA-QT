@@ -1,4 +1,4 @@
-MXE=/persist/mxe
+MXE=~/mxe
 export PATH="$MXE/usr/bin:$PATH"
 HOST="i686-w64-mingw32.shared"
 QMAKE="$HOST-qmake-qt5"
@@ -31,7 +31,7 @@ done;
 for x in libgcc_s_sjlj-1 libstdc++-6 libpcre2-16-0 zlib1 libharfbuzz-0 \
             libpng16-16 libfreetype-6 libglib-2.0-0 libbz2 libintl-8 libpcre-1\
             libiconv-2 libwinpthread-1 libjasper libjpeg-9 libmng-2 libtiff-5\
-            libwebp-5 libwebpdemux-1 liblcms2-2 liblzma-5 libfftw3-3; do
+            libwebp-7 libwebpdemux-2 liblcms2-2 liblzma-5 libfftw3-3 libzstd; do
     cp "$MXE/usr/$HOST/bin/$x.dll" release/
 done
 cp ../libxavna/.libs/libxavna-0.dll release/
