@@ -146,7 +146,8 @@ static tuple<complex5,int> readValue3(int ttyFD, int cnt) {
 
 static tuple<array<complex<double>,4>,int> readValue4(int ttyFD, int cnt) {
 	array<complex<double>, 4> result = {0.,0.,0.,0.};
-	tuple<array<int64_t,8>,int> tmp = readValue2(ttyFD, cnt);
+	// normalizePhase must be false
+	tuple<array<int64_t,8>,int> tmp = readValue2(ttyFD, cnt, false);
 	array<int64_t,8> vals = get<0>(tmp);
 	result[0] = processValue(vals[0], vals[1]);
 	result[1] = processValue(vals[2], vals[3]);
