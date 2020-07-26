@@ -68,21 +68,29 @@ cd /PATH/TO/NanoVNA-QT
 
 __Linux系统下编译Windows目标 / Cross-compile for windows (from Linux)__
 
+Prerequisites:
+```bash
+sudo apt-get install python make autoconf automake autopoint bison flex gperf intltool libtool libtool-bin lzip ruby unzip p7zip-full libgdk-pixbuf2.0-dev libssl-dev libeigen3-dev fftw3-dev mingw-w64
+```
+
 下载与编译 MXE:
 ```bash
 cd ~/
 git clone https://github.com/mxe/mxe.git
 cd mxe
+echo "MXE_TARGETS := i686-w64-mingw32.shared" >> settings.mk
 export QT_MXE_ARCH=386
 make qt5 qtcharts cc eigen fftw pthreads
 ```
-编辑mxe/settings.mk并将i686-w64-mingw32.shared添加到MXE_TARGETS变量。
 
-Edit mxe/settings.mk and add i686-w64-mingw32.shared to MXE_TARGETS.
-
-编译
+编译 Application:
 ```bash
-cd /PATH/TO/NanoVNA-QT
-export PATH="/PATH/TO/MXE/usr/bin:$PATH"
+cd ~/
+git clone https://github.com/nanovna/NanoVNA-QT.git
+cd NanoVNA-QT
+export PATH="~/mxe/usr/bin:$PATH"
 ./deploy_windows.sh
+# Result is in ./vna_qt_windows.zip
 ```
+
+Tested on a fresh install of Ubuntu 18.04 LTS.

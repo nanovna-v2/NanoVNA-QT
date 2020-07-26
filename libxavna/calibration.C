@@ -1,3 +1,4 @@
+#define  _USE_MATH_DEFINES
 #include "include/calibration.H"
 #include "include/workarounds.H"
 #include <iostream>

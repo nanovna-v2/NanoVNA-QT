@@ -3,6 +3,7 @@
 #include <cmath>
 #include <QPaintEvent>
 #include <QPainter>
+#include <QPainterPath>
 PolarView::PolarView(QWidget *parent) : QWidget(parent)
 {
 
