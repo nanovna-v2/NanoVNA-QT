@@ -1,7 +1,12 @@
 # NanoVNA-QT
-NanoVNA V2配套的PC软件，可用于实时网络分析和测量，基于xaVNA软件。
-
 PC GUI software for NanoVNA V2, based on the software for the xaVNA.
+
+### https://nanorfe.com/nanovna-v2.html
+
+### https://www.tindie.com/products/hcxqsgroup/nanovna-v2/
+
+
+NanoVNA V2配套的PC软件，可用于实时网络分析和测量，基于xaVNA软件。
 
 
 # 下载 / Downloads
