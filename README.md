@@ -10,7 +10,7 @@ NanoVNA V2配套的PC软件，可用于实时网络分析和测量，基于xaVNA
 
 
 # 下载 / Downloads
-https://github.com/nanovna/NanoVNA-QT/releases
+https://nanorfe.com/nanovna-v2-software.html
 
 
 # 截图 / Screenshots
