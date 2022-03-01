@@ -1,29 +1,28 @@
 # NanoVNA-QT
-PC GUI software for NanoVNA V2, based on the software for the xaVNA.
+PC GUI software for NanoVNA V2 series (V2 Plus4/V2 Plus4 Pro).
 
-### https://nanorfe.com/nanovna-v2.html
-
-### https://www.tindie.com/products/hcxqsgroup/nanovna-v2/
-
-
-NanoVNA V2配套的PC软件，可用于实时网络分析和测量，基于xaVNA软件。
+- Supports hardware versions listed here: https://nanorfe.com/nanovna-v2.html
+- https://www.tindie.com/products/hcxqsgroup/nanovna-v2/
 
 
-# 下载 / Downloads
+NanoVNA V2配套的PC软件，可用于实时网络分析和测量。
+
+
+# Downloads / 下载
 https://nanorfe.com/nanovna-v2-software.html
 
 
-# 截图 / Screenshots
+# Screenshots / 截图
 
-##### 开路同轴电缆 / Open circuited coax stub
+##### Open circuited coax stub / 开路同轴电缆
 
 <img src="pictures/coax.png" width="500">
 
-##### 天线 / Antenna
+##### Antenna / 天线
 
 <img src="pictures/antenna.png" width="500">
 
-##### 障碍距离 / Time to fault
+##### Time to fault / 障碍距离
 
 <img src="pictures/ttf.png" width="500">
 
