@@ -19,7 +19,10 @@ set(vna_qt_SRCS
     calkitsettingsdialog.C
     calkitsettings.C
     networkview.C
-    dtfwindow.C)
+    dtfwindow.C
+    firmwareupdatedialog.C
+    firmwareupdater.C
+    calibrationfinetunedialog.C)
 
 set(vna_qt_FRMS
     mainwindow.ui
@@ -31,7 +34,9 @@ set(vna_qt_FRMS
     calkitsettingsdialog.ui
     calkitsettingswidget.ui
     dtfwindow.ui
-    graphlimitsdialog.ui)
+    graphlimitsdialog.ui
+    firmwareupdatedialog.ui
+    calibrationfinetunedialog.ui)
 
 set(vna_qt_HDRS
     polarview.H
@@ -46,12 +51,15 @@ set(vna_qt_HDRS
     calkitsettingsdialog.H
     calkitsettings.H
     networkview.H
-    dtfwindow.H)
+    dtfwindow.H
+    firmwareupdatedialog.H
+    firmwareupdater.H
+    calibrationfinetunedialog.H)
 
 
 add_executable(vna_qt ${vna_qt_SRCS} ${vna_qt_FRMS} ${vna_qt_HDRS})
 
-target_link_libraries(vna_qt Qt5::Charts ${FFTW3_LIBRARIES} xavna xavna_mock_ui)
+target_link_libraries(vna_qt Qt5::Charts ${FFTW3_LIBRARIES} xavna xavna_mock_ui pthread)
 
 # Install destinations
 install(TARGETS vna_qt RUNTIME DESTINATION ${BIN_INSTALL_DIR})
