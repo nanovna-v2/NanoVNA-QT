@@ -21,9 +21,9 @@ class ImpedanceDisplay;
 class GraphPanel;
 
 namespace QtCharts {
-class QChartView;
-class QChart;
-class QValueAxis;
+//class QChartView;
+////class QChart;
+//class QValueAxis;
 }
 namespace xaxaxa {
 class VNADevice;

@@ -393,14 +393,14 @@ QWidget *MainWindow::createTopFloat(QWidget *w) {
 
     QWidget* widget2 = new QWidget();
     layout2->addItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding));
-    layout2->setMargin(0);
+    //layout2->setMargin(0);
     widget2->setLayout(layout2);
     widget2->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
     layout->addWidget(widget2);
     layout->addItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding));
     w->setLayout(layout);
-    layout->setMargin(4);
+    //layout->setMargin(4);
     return widget2;
 }
 

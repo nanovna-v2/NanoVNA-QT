@@ -1,7 +1,7 @@
 
 add_definitions(-DXAVNA_MOCK_UI_LIBRARY)
 
-include_directories(${Qt5Charts_INCLUDE_DIRS})
+include_directories(${Qt6Charts_INCLUDE_DIRS})
 
 # Instruct CMake to run moc automatically when needed
 set(CMAKE_AUTOMOC ON)
@@ -28,7 +28,7 @@ set_target_properties(xavna_mock_ui PROPERTIES
                           VERSION ${xaVNA_VERSION_STRING}
                           SOVERSION ${xaVNA_VERSION_MAJOR})
 
-target_link_libraries(xavna_mock_ui Qt5::Core Qt5::Widgets Qt5::Gui xavna)
+target_link_libraries(xavna_mock_ui Qt6::Core Qt6::Widgets Qt6::Gui xavna)
 
 # Declare destinations
 install(TARGETS xavna_mock_ui

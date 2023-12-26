@@ -313,7 +313,7 @@ namespace xaxaxa {
 			if(newChunkPoints < 8) newChunkPoints = 8;
 			currChunkPoints = currChunkPoints * 0.7 + newChunkPoints * 0.3;
 			chunkPoints = (int)currChunkPoints;
-			fprintf(stderr, "chunkPoints %d\n", chunkPoints);
+			//fprintf(stderr, "chunkPoints %d\n", chunkPoints);
 		}
 		return NULL;
 	}

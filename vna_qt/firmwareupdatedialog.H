@@ -16,7 +16,7 @@ class FirmwareUpdateDialog : public QDialog
 
 public:
     explicit FirmwareUpdateDialog(QWidget *parent = nullptr);
-    ~FirmwareUpdateDialog();
+    virtual ~FirmwareUpdateDialog();
 
     void beginUploadFirmware(string dev, string file);
 

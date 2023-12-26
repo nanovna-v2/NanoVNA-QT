@@ -2,16 +2,20 @@
 #define GRAPHPANEL_H
 
 #include <QWidget>
+#include <QtCharts/QChart>
+#include <QtCharts/QChartView>
+#include <QtCharts/QValueAxis>
+#include <QtCharts/QLineSeries>
 #include <vector>
 
 namespace Ui {
 class GraphPanel;
 }
 namespace QtCharts {
-class QChartView;
-class QChart;
-class QValueAxis;
-class QLineSeries;
+//class QChartView;
+//class QChart;
+//class QValueAxis;
+//class QLineSeries;
 }
 class QComboBox;
 class QPushButton;

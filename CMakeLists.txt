@@ -11,6 +11,8 @@ if(WIN32)
   endif()
 endif()
 
+set (CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+
 # Project
 project(nanovna_qt C CXX)
 
@@ -63,21 +65,21 @@ endif()
 # ==============================================================================
 # FFTW3
 # ==============================================================================
-find_package(FFTW3 REQUIRED)
-if(FFTW3_FOUND)
-  message(STATUS "Found FFTW3 (${FFTW3_VERSION})")
-  message(STATUS "  fftw3 includes: ${FFTW3_INCLUDE_DIRS}")
-  message(STATUS "  fftw3 libraries: ${FFTW3_LIBRARIES}")
-  include_directories(${FFTW3_INCLUDE_DIR})
+find_package(FFTW REQUIRED)
+if(FFTW_FOUND)
+  message(STATUS "Found FFTW (${FFTW_VERSION})")
+  message(STATUS "  fftw includes: ${FFTW_INCLUDE_DIRS}")
+  message(STATUS "  fftw libraries: ${FFTW_LIBRARIES}")
+  include_directories(${FFTW_INCLUDE_DIR})
 endif()
 
 # ==============================================================================
 # QT5 Charts (and QT5 subdependences)
 # ==============================================================================
-find_package(Qt5 COMPONENTS Core Gui Widgets Charts REQUIRED)
+find_package(Qt6 COMPONENTS Core Gui Widgets Charts REQUIRED)
 if(Qt5Charts_FOUND)
-  message(STATUS "Found QT5 version: ${Qt5_VERSION}")
-  message(STATUS "  qt5 charts dir: ${Qt5Charts_DIR}")
+  message(STATUS "Found QT6 version: ${Qt6_VERSION}")
+  message(STATUS "  qt6 charts dir: ${Qt6Charts_DIR}")
 endif()
 
 # ==============================================================================

@@ -12,6 +12,7 @@
 #include <QChart>
 #include <QPushButton>
 #include <QComboBox>
+#include <iostream>
 
 using namespace std;
 using namespace xaxaxa;
@@ -235,9 +236,9 @@ void NetworkView::updateMarkerViews(int marker) {
                     ss->replace(0, -100, 0);
                     continue;
                 }
-                ss->replace(0,series->at(freqIndex));
+                //ss->replace(0,series->at(freqIndex));
                 //printf("sss %f %f\n",series->at(freqIndex).x(), series->at(freqIndex).y());
-                fflush(stdout);
+                //fflush(stdout);
             }
         }
         if(auto* pv = dynamic_cast<PolarView*>(view.view)) {
@@ -252,43 +253,59 @@ void NetworkView::updateMarkerViews(int marker) {
     }
 }
 
-void NetworkView::updateBottomLabels(int marker) {
+void NetworkView::updateBottomLabels(int marker)
+{
     SParamView* lineViews[4];
     int lineViewCount=0;
-    for(auto& view:views) {
+    
+    for(auto& view : views)
+    {
         if(dynamic_cast<QLineSeries*>(view.view)) {
             lineViews[lineViewCount] = &view;
             lineViewCount++;
-            if(lineViewCount>=4) break;
+            if(lineViewCount >= 4)
+                break;
         }
     }
-    for(int i=0;i<(int)markers.size();i++) {
-        if(marker>=0 && marker!=i) continue;
+
+    for(int i = 0; i < (int)markers.size(); i++)
+    {
+        if(marker >= 0 && marker !=i )
+            continue;
         auto& marker = markers[i];
-        if(marker.ms == NULL) continue;
-        for(int j=0;j<4;j++) {
-            if(j>=lineViewCount) marker.ms->setLabelText(j, "");
+        
+        if(marker.ms == NULL)
+            continue;
+        
+        for(int j = 0; j < 4; j++)
+        {
+            if(j >= lineViewCount) {
+                marker.ms->setLabelText(j, "");
+            }
             else {
                 auto* series = dynamic_cast<QLineSeries*>(lineViews[j]->view);
                 const char* fmt = "";
                 switch(lineViews[j]->src.type) {
-                case SParamViewSource::TYPE_MAG: fmt = "%.1lf dB"; break;
-                case SParamViewSource::TYPE_SWR: fmt = "%.2lf:1"; break;
-                case SParamViewSource::TYPE_PHASE: fmt = "%.1lf °"; break;
-                case SParamViewSource::TYPE_GRPDELAY: fmt = "%.2lf ns"; break;
-                case SParamViewSource::TYPE_Z_RE: fmt = "%.1lf Ω"; break;
-                case SParamViewSource::TYPE_Z_IM: fmt = "%.1lf Ω"; break;
-                case SParamViewSource::TYPE_Z_MAG: fmt = "%.1lf Ω"; break;
-                case SParamViewSource::TYPE_Z_CAP: fmt = "%.1lf pF"; break;
-                case SParamViewSource::TYPE_Z_IND: fmt = "%.2lf nH"; break;
-                case SParamViewSource::TYPE_Y_RE: fmt = "%.1lf mS"; break;
-                case SParamViewSource::TYPE_Y_IM: fmt = "%.1lf mS"; break;
-                case SParamViewSource::TYPE_Y_MAG: fmt = "%.1lf mS"; break;
-                case SParamViewSource::TYPE_Y_CAP: fmt = "%.1lf pF"; break;
-                case SParamViewSource::TYPE_Y_IND: fmt = "%.2lf nH"; break;
-                default: fmt = "%.2lf";
+                    case SParamViewSource::TYPE_MAG: fmt = "%.1lf dB"; break;
+                    case SParamViewSource::TYPE_SWR: fmt = "%.2lf:1"; break;
+                    case SParamViewSource::TYPE_PHASE: fmt = "%.1lf °"; break;
+                    case SParamViewSource::TYPE_GRPDELAY: fmt = "%.2lf ns"; break;
+                    case SParamViewSource::TYPE_Z_RE: fmt = "%.1lf Ω"; break;
+                    case SParamViewSource::TYPE_Z_IM: fmt = "%.1lf Ω"; break;
+                    case SParamViewSource::TYPE_Z_MAG: fmt = "%.1lf Ω"; break;
+                    case SParamViewSource::TYPE_Z_CAP: fmt = "%.1lf pF"; break;
+                    case SParamViewSource::TYPE_Z_IND: fmt = "%.2lf nH"; break;
+                    case SParamViewSource::TYPE_Y_RE: fmt = "%.1lf mS"; break;
+                    case SParamViewSource::TYPE_Y_IM: fmt = "%.1lf mS"; break;
+                    case SParamViewSource::TYPE_Y_MAG: fmt = "%.1lf mS"; break;
+                    case SParamViewSource::TYPE_Y_CAP: fmt = "%.1lf pF"; break;
+                    case SParamViewSource::TYPE_Y_IND: fmt = "%.2lf nH"; break;
+                    default: fmt = "%.2lf";
                 }
-                marker.ms->setLabelText(j, ssprintf(32, fmt, series->at(marker.freqIndex).y()));
+                char buf[32];
+                //snprintf(buf, 32, fmt, series->at(marker.freqIndex).y());
+                marker.ms->setLabelText(j, "buf");
+                //marker.ms->setLabelText(j, ssprintf(32, fmt, series->at(marker.freqIndex).y()));
             }
         }
     }
