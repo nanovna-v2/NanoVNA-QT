@@ -274,7 +274,7 @@ public:
 		} else {
 			tr = true;
 			fprintf(stderr, "detected T/R vna\n");
-			fprintf(stderr, "%lld %lld\n", result[0], result[1]);
+			fprintf(stderr, "%ld %ld\n", result[0], result[1]);
 		}
 		
 		if(!tr)

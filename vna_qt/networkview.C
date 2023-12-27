@@ -105,7 +105,7 @@ GraphPanel* NetworkView::createGraphView(bool freqDomain, bool tr) {
     vector<int> curViews;
     for(int i=0;i<2;i++) {
         // set up markers
-        auto fn = [gp, i, this](SParamView& view){
+        auto fn = [gp, i](SParamView& view){
             QScatterSeries* markerSeries = new QScatterSeries();
             gp->chart->addSeries(markerSeries);
             markerSeries->setPointsVisible(true);

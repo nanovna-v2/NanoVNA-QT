@@ -219,7 +219,7 @@ void MainWindow::setCallbacks() {
         this->rawValues[freqIndex] = val;
         QMetaObject::invokeMethod(this, "updateViews", Qt::QueuedConnection, Q_ARG(int, freqIndex));
     };
-    vna->sweepCompletedCallback = [this](const vector<VNARawValue>&) {
+    vna->sweepCompletedCallback = [](const vector<VNARawValue>&) {
 
     };
     vna->backgroundErrorCallback = [this](const exception& exc) {

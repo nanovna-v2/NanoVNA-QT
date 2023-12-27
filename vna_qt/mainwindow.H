@@ -8,32 +8,31 @@
 #include <map>
 #include <string>
 #include <xavna/common.H>
+
+#include <QWidget>
+#include <QPushButton>
+#include <QTimer>
+#include <QTextStream>
+
 #include "calkitsettings.H"
 #include "networkview.H"
 #include "dtfwindow.H"
 namespace Ui {
 class MainWindow;
 }
-class QWidget;
-class QPushButton;
+
 class PolarView;
 class ImpedanceDisplay;
 class GraphPanel;
 
-namespace QtCharts {
-//class QChartView;
-////class QChart;
-//class QValueAxis;
-}
+
 namespace xaxaxa {
 class VNADevice;
 class VNACalibration;
 }
-class QTimer;
-class MarkerSlider;
-class QTextStream;
 
-using namespace QtCharts;
+class MarkerSlider;
+
 using namespace xaxaxa;
 using namespace std;
 

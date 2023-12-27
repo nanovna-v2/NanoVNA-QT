@@ -99,11 +99,13 @@ namespace xaxaxa {
 		__sync_add_and_fetch(&_measurementCnt, 1);
 	}
 	
+	/*
 	static inline void swap(VNARawValue& a, VNARawValue& b) {
 		VNARawValue tmp = a;
 		a = b;
 		b = tmp;
 	}
+	*/
 	void* VNADevice::_mainThread() {
 		if(xavna_is_autosweep(_dev)) {
 			return _runAutoSweep();
@@ -211,7 +213,7 @@ namespace xaxaxa {
 	void* VNADevice::_runAutoSweep() {
 		uint32_t last_measurementCnt = _measurementCnt;
 		int lastFreqIndex = -1;
-		int measurementEndPoint = -1;
+		//int measurementEndPoint = -1;
 		double currChunkPoints = 16.;
 		int chunkPoints = (int)currChunkPoints;
 		int nValues = this->nValues;

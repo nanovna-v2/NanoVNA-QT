@@ -21,10 +21,10 @@ set(xaVNA_VERSION_MINOR 1)
 set(xaVNA_VERSION_STRING ${xaVNA_VERSION_MAJOR}.${xaVNA_VERSION_MINOR})
 
 # Set C++11 as standard for the whole project
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 
 if(UNIX)
-  set(CMAKE_CXX_FLAGS "-O2 ${CMAKE_CXX_FLAGS}")
+	set(CMAKE_CXX_FLAGS "-O2 -Wall ${CMAKE_CXX_FLAGS}")
   set(CMAKE_CXX_FLAGS_DEBUG "-O2 -g ${CMAKE_CXX_FLAGS}")
 endif()
 
