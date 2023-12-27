@@ -104,9 +104,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
-    printf("aaaaa\n");
-    fflush(stdout);
-
     vna->stopScan();
     vna->close();
 
@@ -115,8 +112,6 @@ MainWindow::~MainWindow()
     //delete polarView;
     delete vna;
     delete ui;
-    printf("ccccc\n");
-    fflush(stdout);
 }
 
 void MainWindow::loadSettings() {
@@ -394,6 +389,7 @@ QWidget *MainWindow::createTopFloat(QWidget *w) {
     QWidget* widget2 = new QWidget();
     layout2->addItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding));
     //layout2->setMargin(0);
+    layout2->setContentsMargins(0,0,0,0);
     widget2->setLayout(layout2);
     widget2->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
@@ -401,6 +397,7 @@ QWidget *MainWindow::createTopFloat(QWidget *w) {
     layout->addItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding));
     w->setLayout(layout);
     //layout->setMargin(4);
+    layout->setContentsMargins(4,4,4,4);
     return widget2;
 }
 

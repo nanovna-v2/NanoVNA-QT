@@ -236,9 +236,8 @@ void NetworkView::updateMarkerViews(int marker) {
                     ss->replace(0, -100, 0);
                     continue;
                 }
-                //ss->replace(0,series->at(freqIndex));
-                //printf("sss %f %f\n",series->at(freqIndex).x(), series->at(freqIndex).y());
-                //fflush(stdout);
+                if (freqIndex < series->count())
+                    ss->replace(0,series->at(freqIndex));
             }
         }
         if(auto* pv = dynamic_cast<PolarView*>(view.view)) {
@@ -302,10 +301,9 @@ void NetworkView::updateBottomLabels(int marker)
                     case SParamViewSource::TYPE_Y_IND: fmt = "%.2lf nH"; break;
                     default: fmt = "%.2lf";
                 }
-                char buf[32];
-                //snprintf(buf, 32, fmt, series->at(marker.freqIndex).y());
-                marker.ms->setLabelText(j, "buf");
-                //marker.ms->setLabelText(j, ssprintf(32, fmt, series->at(marker.freqIndex).y()));
+
+                if ( marker.freqIndex < series->count() )
+                    marker.ms->setLabelText(j, ssprintf(32, fmt, series->at(marker.freqIndex).y()));
             }
         }
     }
