@@ -4,11 +4,12 @@
 #include <functional>
 #include <array>
 #include <xavna/common.H>
+#include <QtCharts/QValueAxis>
 
 namespace QtCharts {
-class QChartView;
-class QChart;
-class QValueAxis;
+//class QChartView;
+//class QChart;
+//class QValueAxis;
 }
 
 class QTimer;

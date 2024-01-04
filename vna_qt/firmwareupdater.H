@@ -3,6 +3,8 @@
 #include <string>
 #include <functional>
 #include <pthread.h>
+#include <cstdint>
+
 using namespace std;
 
 class FirmwareUpdater

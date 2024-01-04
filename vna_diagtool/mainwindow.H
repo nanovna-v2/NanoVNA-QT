@@ -4,16 +4,17 @@
 #include <QMainWindow>
 #include <xavna/xavna_cpp.H>
 #include <math.h>
+
+#include <QtCharts/QChartView>
+#include <QtCharts/QChart>
+#include <QtCharts/QValueAxis>
+#include <QtCharts/QLineSeries>
+
 namespace Ui {
 class MainWindow;
 }
 
-namespace QtCharts {
-class QChartView;
-class QChart;
-class QValueAxis;
-class QLineSeries;
-}
+
 namespace xaxaxa {
 class VNADevice;
 class VNACalibration;
@@ -22,7 +23,6 @@ class QTimer;
 class MarkerSlider;
 class QTextStream;
 
-using namespace QtCharts;
 using namespace xaxaxa;
 using namespace std;
 

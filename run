@@ -1,3 +1,0 @@
-#!/bin/bash
-LIBDIR="$(dirname $0)"
-LD_LIBRARY_PATH="$LIBDIR/libxavna/.libs:$LIBDIR/libxavna/xavna_mock_ui" "$@"

@@ -4,12 +4,13 @@
 #include <QtPlugin>
 #include <QTranslator>
 #include <QLibraryInfo>
+#include <QMetaType>
 
 int main(int argc, char *argv[])
 {
     qRegisterMetaType<string>("string");
     qRegisterMetaType<CalKitSettings>("CalKitSettings");
-    qRegisterMetaTypeStreamOperators<CalKitSettings>("CalKitSettings");
+    //qRegisterMetaTypeStreamOperators<CalKitSettings>("CalKitSettings");
 
     QCoreApplication::setApplicationName("NanoVNA QT GUI");
 

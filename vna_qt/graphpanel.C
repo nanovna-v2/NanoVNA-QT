@@ -8,7 +8,7 @@
 #include <QtCharts/QValueAxis>
 #include <QtCharts/QScatterSeries>
 
-using namespace QtCharts;
+
 GraphPanel::GraphPanel(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::GraphPanel)

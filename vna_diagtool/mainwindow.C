@@ -115,9 +115,9 @@ void MainWindow::openDevice(string dev) {
 }
 
 void MainWindow::setCallbacks() {
-    vna->frequencyCompletedCallback = [this](int freqIndex, VNARawValue val) {
+    vna->frequencyCompletedCallback = [](int freqIndex, VNARawValue val) {
     };
-    vna->sweepCompletedCallback = [this](const vector<VNARawValue>&) {
+    vna->sweepCompletedCallback = [](const vector<VNARawValue>&) {
     };
     vna->frequencyCompletedCallback2_ = [this](int freqIndex, const vector<array<complex<double>, 4> >& values) {
         this->rawValues[freqIndex] = values;

@@ -30,7 +30,7 @@ public:
     function<void()> modelsChanged;
 
     explicit CalibrationFineTuneDialog(QWidget *parent = nullptr);
-    ~CalibrationFineTuneDialog();
+    virtual ~CalibrationFineTuneDialog();
 
 
     // calStdModels: indexed by [freqIndex][modelIndex],
